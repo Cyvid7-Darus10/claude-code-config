@@ -1,30 +1,10 @@
 # Claude Code Config
 
-My personal Claude Code configuration for building apps fast. Open-sourced so others can use it as a starting point.
+Production-ready Claude Code configuration for rapid app development. 29 agents, 60 commands, 60 skills, 65 rules — ready to use.
 
-## What's Inside
+Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-code) + [obra/superpowers](https://github.com/obra/superpowers).
 
-| Component | Count | Description |
-|---|---|---|
-| **Agents** | 29 | Specialized subagents (code review, architecture, security, TDD, language-specific reviewers & build resolvers) |
-| **Commands** | 60 | Slash commands (`/plan`, `/tdd`, `/verify`, `/code-review`, `/save-session`, `/devfleet`, etc.) |
-| **Skills** | 60 | Workflow skills (brainstorming, strategic-compact, continuous-learning, TDD, git worktrees, debugging, etc.) |
-| **Rules** | 65 | Coding standards, patterns, security, and testing rules (common + TypeScript, Swift, and more) |
-| **Hooks** | 2 | Sound notifications on task completion and notifications |
-| **Sounds** | 3 | Warcraft-inspired notification sounds (jobs-done, work-work, quest-complete) |
-| **Scripts** | 29 | Hook scripts and utilities |
-| **MCP Configs** | 1 | GitHub MCP server (Docker-based) |
-
-## Sources & Credits
-
-This config is built on top of two excellent open-source projects:
-
-- **[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** by Affaan Mustafa — Agents, commands, skills, rules, hooks, and scripts. The foundation of this setup.
-- **[superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — Brainstorming, planning, git worktrees, TDD, and code review skills. The ideation-to-execution workflow.
-
-## Installation
-
-### Quick Install (copy to ~/.claude/)
+## Quick Start
 
 ```bash
 git clone https://github.com/Cyvid7-Darus10/claude-code-config.git
@@ -32,76 +12,164 @@ cd claude-code-config
 ./install.sh
 ```
 
-### Manual Install
+Restart Claude Code, then try `/plan` or `/tdd`.
 
-Copy the directories you want into `~/.claude/`:
+## What's Inside
+
+| Component | Count | Highlights |
+|---|---|---|
+| **Agents** | 29 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `typescript-reviewer`, `build-error-resolver`, language-specific reviewers |
+| **Commands** | 60 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/save-session`, `/resume-session`, `/devfleet`, `/orchestrate`, `/brainstorm` |
+| **Skills** | 60 | Brainstorming, writing-plans, executing-plans, git-worktrees, TDD, systematic-debugging, strategic-compact, continuous-learning |
+| **Rules** | 65 | Coding standards, patterns, security, testing — common + TypeScript, Swift, Python, Go, Rust, Kotlin, Java, C++, PHP, C#, Perl |
+| **Hooks** | 29 | Quality gates, auto-format, type-checking, git push reminders, session persistence, cost tracking |
+| **MCP** | 1 | GitHub MCP server (manage repos, PRs, issues via conversation) |
+| **Sounds** | 3 | Notification sounds for task completion (macOS) |
+
+## Selective Install
+
+Install only what you need:
 
 ```bash
-# Clone
-git clone https://github.com/Cyvid7-Darus10/claude-code-config.git
-cd claude-code-config
-
-# Copy everything
-cp -r agents/ ~/.claude/agents/
-cp -r commands/ ~/.claude/commands/
-cp -r skills/ ~/.claude/skills/
-cp -r rules/ ~/.claude/rules/
-cp -r hooks/ ~/.claude/hooks/
-cp -r scripts/ ~/.claude/scripts/
-cp -r sounds/ ~/.claude/sounds/
-cp settings.json ~/.claude/settings.json
-cp mcp.json ~/.claude/mcp.json
+./install.sh agents skills          # Just agents and skills
+./install.sh commands               # Just slash commands
+./install.sh --dry-run              # Preview what would be installed
+./install.sh --uninstall            # Remove everything
+./install.sh --uninstall skills     # Remove only skills
 ```
 
-### MCP Server Setup
+Available components: `agents`, `commands`, `skills`, `rules`, `hooks`, `sounds`, `mcp`
 
-The GitHub MCP server requires Docker and a GitHub token:
+## Key Workflows
 
-1. Make sure Docker is running
-2. Get your GitHub token: `gh auth token` or create one at [github.com/settings/tokens](https://github.com/settings/tokens)
-3. Edit `~/.claude/mcp.json` and replace `<YOUR_GITHUB_TOKEN>` with your token
+### Idea to App
 
-### Sound Notifications
+```
+/plan → Brainstorming skill refines your idea → Writing-plans creates actionable steps → /tdd builds it
+```
 
-The hooks play sound effects on macOS using `afplay`. The sound paths in `settings.json` point to `~/.claude/sounds/`. If you're on Linux, swap `afplay` for `aplay` or `paplay`.
+### Development Loop
+
+```
+/tdd → Write tests first → Implement → /verify → /code-review → Ship
+```
+
+### Multi-Agent
+
+```
+/devfleet → Parallel agents work on different parts → /orchestrate coordinates them
+```
+
+### Session Management
+
+```
+/save-session → Persist context → (new conversation) → /resume-session → Continue where you left off
+```
+
+## MCP Server Setup
+
+The GitHub MCP server lets Claude manage repos, PRs, and issues directly.
+
+**Prerequisites:** Docker running (`docker ps` to verify)
+
+```bash
+# Get your token
+gh auth token
+# OR create one at https://github.com/settings/tokens
+# Required scopes: repo, read:user, read:org
+
+# Add token to config
+# Edit ~/.claude/mcp.json and replace <YOUR_GITHUB_TOKEN>
+```
+
+## Sound Notifications
+
+Hooks play sounds on task completion. macOS only (uses `afplay`).
+
+| Sound | Event | File |
+|---|---|---|
+| "Jobs done" | Session stops | `sounds/jobs-done.mp3` |
+| "Work work" | Notifications | `sounds/work-work.mp3` |
+| "Quest complete" | (Available) | `sounds/quest-complete.mp3` |
+
+**Linux:** Replace `afplay` with `paplay` or `aplay` in `settings.json`.
+**Windows/WSL:** Replace with `powershell.exe -c (New-Object Media.SoundPlayer 'path').PlaySync()`.
+**Disable:** Remove the `hooks` section from `settings.json`.
 
 ## Structure
 
 ```
 claude-code-config/
 ├── agents/              # 29 specialized subagents
-├── commands/            # 60 slash commands
+│   ├── planner.md       # Plans and breaks down tasks
+│   ├── architect.md     # System design decisions
+│   ├── code-reviewer.md # Code quality review
+│   ├── tdd-guide.md     # Test-driven development
+│   └── ...
+├── commands/            # 60 slash commands (/plan, /tdd, /verify, ...)
 ├── skills/              # 60 workflow skills
-├── rules/               # 65 coding rules (common + per-language)
-│   ├── common/          # Universal rules
+│   ├── brainstorming/   # Refine rough ideas into specs
+│   ├── writing-plans/   # Create actionable plans
+│   ├── executing-plans/ # Execute plans step by step
+│   ├── using-git-worktrees/ # Parallel development
+│   ├── strategic-compact/   # Context management
+│   └── ...
+├── rules/               # 65 coding rules
+│   ├── common/          # Universal (security, testing, git, patterns)
 │   ├── typescript/      # TypeScript-specific
 │   ├── swift/           # Swift-specific
-│   └── .../             # Other languages
-├── hooks/               # Hook configurations
-├── scripts/             # Hook scripts and utilities
-├── sounds/              # Notification sound effects
-├── mcp-configs/         # MCP server reference configs
-├── settings.json        # Claude Code settings (hooks, plugins)
-├── mcp.json             # MCP server config (GitHub)
-├── AGENTS.md            # Agent specifications
+│   └── ...              # + python, golang, rust, kotlin, java, cpp, php, csharp, perl
+├── hooks/               # Hook configurations (hooks.json)
+├── scripts/hooks/       # 29 hook scripts (quality gates, formatting, etc.)
+├── sounds/              # Notification MP3s
+├── mcp-configs/         # Reference MCP server configurations
+├── settings.json        # Claude Code settings template
+├── mcp.json             # GitHub MCP server config (add your token)
+├── install.sh           # Installer (supports selective install/uninstall)
+├── AGENTS.md            # Agent specifications and usage guide
+├── LICENSE              # MIT
 └── README.md
 ```
 
-## Key Workflows
+## Customization
 
-- `/plan` — Structure an idea into an actionable development plan
-- `/tdd` — Test-driven development workflow
-- `/verify` — Verification loop before marking work complete
-- `/code-review` — Automated code review via subagent
-- `/save-session` / `/resume-session` — Persist and restore session context
-- `/devfleet` — Multi-agent parallel execution
-- **Brainstorming skill** — Refines rough ideas through structured questions
-- **Strategic compact skill** — Better context/memory management
+**Add your own command:** Create `~/.claude/commands/my-command.md` with:
+```markdown
+---
+description: What my command does
+---
+Instructions for Claude when this command is invoked...
+```
+
+**Add your own skill:** Create `~/.claude/skills/my-skill/SKILL.md` with:
+```markdown
+---
+name: my-skill
+description: When to activate this skill
+---
+Domain knowledge and instructions...
+```
+
+**Add your own agent:** Create `~/.claude/agents/my-agent.md` with:
+```markdown
+---
+name: my-agent
+description: What this agent specializes in
+tools: ["Read", "Grep", "Glob", "Bash"]
+model: sonnet
+---
+System prompt for the agent...
+```
+
+## Credits
+
+- **[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** by Affaan Mustafa — Agents, commands, rules, hooks, scripts. The foundation.
+- **[superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — Brainstorming, planning, git worktrees, TDD skills. The ideation workflow.
 
 ## License
 
-MIT
+MIT - See [LICENSE](LICENSE)
 
 ## Author
 
-Cyrus David Pastelero
+Cyrus David Pastelero ([@Cyvid7-Darus10](https://github.com/Cyvid7-Darus10))

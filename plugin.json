@@ -1,13 +1,13 @@
 {
-  "name": "everything-claude-code",
-  "version": "1.9.0",
-  "description": "Complete collection of battle-tested Claude Code configs from an Anthropic hackathon winner - agents, skills, hooks, and rules evolved over 10+ months of intensive daily use",
+  "name": "claude-code-config",
+  "version": "1.0.0",
+  "description": "Production-ready Claude Code configuration — 29 agents, 60 commands, 60 skills, 65 rules. Built on everything-claude-code + obra/superpowers.",
   "author": {
-    "name": "Affaan Mustafa",
-    "url": "https://x.com/affaanmustafa"
+    "name": "Cyrus David Pastelero",
+    "url": "https://github.com/Cyvid7-Darus10"
   },
-  "homepage": "https://github.com/affaan-m/everything-claude-code",
-  "repository": "https://github.com/affaan-m/everything-claude-code",
+  "homepage": "https://github.com/Cyvid7-Darus10/claude-code-config",
+  "repository": "https://github.com/Cyvid7-Darus10/claude-code-config",
   "license": "MIT",
   "keywords": [
     "claude-code",
@@ -20,6 +20,8 @@
     "security",
     "workflow",
     "automation",
-    "best-practices"
+    "best-practices",
+    "superpowers",
+    "brainstorming"
   ]
 }

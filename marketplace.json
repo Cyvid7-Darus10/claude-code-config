@@ -1,26 +1,25 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "everything-claude-code",
-  "description": "Battle-tested Claude Code configurations from an Anthropic hackathon winner — agents, skills, hooks, commands, and rules evolved over 10+ months of intensive daily use",
+  "name": "claude-code-config",
+  "description": "Production-ready Claude Code configuration — 29 agents, 60 commands, 60 skills, 65 rules for rapid app development.",
   "owner": {
-    "name": "Affaan Mustafa",
-    "email": "me@affaanmustafa.com"
+    "name": "Cyrus David Pastelero",
+    "email": ""
   },
   "metadata": {
-    "description": "Battle-tested Claude Code configurations from an Anthropic hackathon winner"
+    "description": "Claude Code config built on everything-claude-code + obra/superpowers"
   },
   "plugins": [
     {
-      "name": "everything-claude-code",
+      "name": "claude-code-config",
       "source": "./",
-      "description": "The most comprehensive Claude Code plugin — 14+ agents, 56+ skills, 33+ commands, and production-ready hooks for TDD, security scanning, code review, and continuous learning",
-      "version": "1.9.0",
+      "description": "29 agents, 60 commands, 60 skills, 65 rules — brainstorming, TDD, code review, security, multi-agent orchestration, and more.",
+      "version": "1.0.0",
       "author": {
-        "name": "Affaan Mustafa",
-        "email": "me@affaanmustafa.com"
+        "name": "Cyrus David Pastelero"
       },
-      "homepage": "https://github.com/affaan-m/everything-claude-code",
-      "repository": "https://github.com/affaan-m/everything-claude-code",
+      "homepage": "https://github.com/Cyvid7-Darus10/claude-code-config",
+      "repository": "https://github.com/Cyvid7-Darus10/claude-code-config",
       "license": "MIT",
       "keywords": [
         "agents",
@@ -30,7 +29,8 @@
         "tdd",
         "code-review",
         "security",
-        "best-practices"
+        "brainstorming",
+        "superpowers"
       ],
       "category": "workflow",
       "tags": [
@@ -41,7 +41,7 @@
         "tdd",
         "code-review",
         "security",
-        "best-practices"
+        "brainstorming"
       ],
       "strict": false
     }
