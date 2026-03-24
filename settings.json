@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /Users/cyrus/.claude/sounds/jobs-done.mp3 &"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /Users/cyrus/.claude/sounds/work-work.mp3 &"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "effortLevel": "high"
+}

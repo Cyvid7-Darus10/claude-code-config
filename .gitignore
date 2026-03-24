@@ -1,0 +1,10 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets - never commit real tokens
+*.secret
+.env
+
+# Runtime/cache
+node_modules/
