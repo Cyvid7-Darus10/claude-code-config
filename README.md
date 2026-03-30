@@ -1,6 +1,6 @@
 # Claude Code Config
 
-Production-ready Claude Code configuration for rapid app development. 29 agents, 60 commands, 60 skills, 65 rules — ready to use.
+Production-ready Claude Code configuration for rapid app development. 29 agents, 60 commands, 60 skills, 65 rules, 7-layer security, real-time monitoring — ready to use.
 
 Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-code) + [obra/superpowers](https://github.com/obra/superpowers).
 
@@ -22,9 +22,50 @@ Restart Claude Code, then try `/plan` or `/tdd`.
 | **Commands** | 60 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/save-session`, `/resume-session`, `/devfleet`, `/orchestrate`, `/brainstorm` |
 | **Skills** | 60 | Brainstorming, writing-plans, executing-plans, git-worktrees, TDD, systematic-debugging, strategic-compact, continuous-learning |
 | **Rules** | 65 | Coding standards, patterns, security, testing — common + TypeScript, Swift, Python, Go, Rust, Kotlin, Java, C++, PHP, C#, Perl |
-| **Hooks** | 29 | Quality gates, auto-format, type-checking, git push reminders, session persistence, cost tracking |
+| **Hooks** | 32 | Quality gates, auto-format, type-checking, git push reminders, session persistence, cost tracking, **security audit**, **monitoring** |
+| **Security** | 7-layer | Deny lists, sandboxing, sanitization, prompt injection defense, supply chain protection, credential protection, observability |
+| **Monitoring** | 3 hooks | Tool execution logging, security auditing, session metrics |
 | **MCP** | 1 | GitHub MCP server (manage repos, PRs, issues via conversation) |
 | **Sounds** | 3 | Notification sounds for task completion (macOS) |
+
+## 7-Layer Security
+
+Production-grade security based on [OWASP Agentic Top 10](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/):
+
+| Layer | Protection |
+|-------|------------|
+| 1. Attack Surface | Minimize access points, restrict `allowedTools` |
+| 2. Sandboxing | Path-based deny lists for `~/.ssh`, `~/.aws`, credentials |
+| 3. Sanitization | Audit external links, detect hidden text |
+| 4. Prompt Injection | Block malicious skills, rules, hooks, CLAUDE.md |
+| 5. Supply Chain | Pin MCP versions, verify packages |
+| 6. Credentials | Separate agent accounts, block env harvesting |
+| 7. Observability | Real-time monitoring, security audit logs |
+
+**Quick security scan:**
+
+```bash
+npx ecc-agentshield scan
+```
+
+See [security/SECURITY.md](security/SECURITY.md) for the full guide.
+
+## Real-Time Monitoring
+
+Track all agent activity with monitoring hooks:
+
+```bash
+# View tool execution log
+tail -f ~/.claude/logs/tool-execution.jsonl | jq
+
+# View security alerts
+tail -f ~/.claude/logs/security-audit.jsonl | jq
+
+# View session metrics
+cat ~/.claude/logs/session-metrics.jsonl | jq
+```
+
+See [monitoring/README.md](monitoring/README.md) for dashboard setup.
 
 ## Selective Install
 
@@ -33,12 +74,13 @@ Install only what you need:
 ```bash
 ./install.sh agents skills          # Just agents and skills
 ./install.sh commands               # Just slash commands
+./install.sh security monitoring    # Just security and monitoring
 ./install.sh --dry-run              # Preview what would be installed
 ./install.sh --uninstall            # Remove everything
 ./install.sh --uninstall skills     # Remove only skills
 ```
 
-Available components: `agents`, `commands`, `skills`, `rules`, `hooks`, `sounds`, `mcp`
+Available components: `agents`, `commands`, `skills`, `rules`, `hooks`, `sounds`, `mcp`, `security`, `monitoring`
 
 ## Key Workflows
 
@@ -104,6 +146,7 @@ claude-code-config/
 │   ├── planner.md       # Plans and breaks down tasks
 │   ├── architect.md     # System design decisions
 │   ├── code-reviewer.md # Code quality review
+│   ├── security-reviewer.md # Security analysis
 │   ├── tdd-guide.md     # Test-driven development
 │   └── ...
 ├── commands/            # 60 slash commands (/plan, /tdd, /verify, ...)
@@ -119,11 +162,19 @@ claude-code-config/
 │   ├── typescript/      # TypeScript-specific
 │   ├── swift/           # Swift-specific
 │   └── ...              # + python, golang, rust, kotlin, java, cpp, php, csharp, perl
+├── security/            # 7-layer security framework
+│   └── SECURITY.md      # Full security guide
+├── monitoring/          # Real-time observability
+│   ├── hooks/           # Monitoring hook scripts
+│   │   ├── log-tool-use.sh     # Log all tool executions
+│   │   ├── security-audit.sh   # Detect suspicious operations
+│   │   └── session-metrics.sh  # Capture session metrics
+│   └── README.md        # Monitoring setup guide
 ├── hooks/               # Hook configurations (hooks.json)
 ├── scripts/hooks/       # 29 hook scripts (quality gates, formatting, etc.)
 ├── sounds/              # Notification MP3s
 ├── mcp-configs/         # Reference MCP server configurations
-├── settings.json        # Claude Code settings template
+├── settings.json        # Claude Code settings with security deny lists
 ├── mcp.json             # GitHub MCP server config (add your token)
 ├── install.sh           # Installer (supports selective install/uninstall)
 ├── AGENTS.md            # Agent specifications and usage guide
@@ -163,8 +214,9 @@ System prompt for the agent...
 
 ## Credits
 
-- **[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** by Affaan Mustafa — Agents, commands, rules, hooks, scripts. The foundation.
+- **[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** by Affaan Mustafa — Agents, commands, rules, hooks, scripts, security guide. The foundation.
 - **[superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — Brainstorming, planning, git worktrees, TDD skills. The ideation workflow.
+- **[claude-code-hooks-multi-agent-observability](https://github.com/disler/claude-code-hooks-multi-agent-observability)** by disler — Monitoring patterns and dashboard inspiration.
 
 ## License
 

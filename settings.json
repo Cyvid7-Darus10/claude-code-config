@@ -1,5 +1,54 @@
 {
+  "permissions": {
+    "deny": [
+      "Read(~/.ssh/*)",
+      "Read(~/.aws/*)",
+      "Read(~/.env)",
+      "Read(**/credentials*)",
+      "Read(**/.env.local)",
+      "Read(**/.env.production)",
+      "Read(**/secrets*)",
+      "Write(~/.ssh/*)",
+      "Write(~/.aws/*)",
+      "Write(~/.env)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf /*)",
+      "Bash(curl * | bash)",
+      "Bash(wget * | bash)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | sh)"
+    ]
+  },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 5,
+            "command": "\"$HOME/.claude/monitoring/hooks/security-audit.sh\""
+          }
+        ],
+        "description": "Security audit - detect suspicious operations"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 5,
+            "command": "\"$HOME/.claude/monitoring/hooks/log-tool-use.sh\""
+          }
+        ],
+        "description": "Log all tool executions for observability"
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -7,7 +56,20 @@
             "type": "command",
             "command": "afplay $HOME/.claude/sounds/jobs-done.mp3 &"
           }
-        ]
+        ],
+        "description": "Play completion sound"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 10,
+            "command": "\"$HOME/.claude/monitoring/hooks/session-metrics.sh\""
+          }
+        ],
+        "description": "Capture session metrics"
       }
     ],
     "Notification": [
@@ -17,7 +79,8 @@
             "type": "command",
             "command": "afplay $HOME/.claude/sounds/work-work.mp3 &"
           }
-        ]
+        ],
+        "description": "Play notification sound"
       }
     ]
   },
