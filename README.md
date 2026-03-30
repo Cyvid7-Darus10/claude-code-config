@@ -32,32 +32,28 @@ This repo gives you a **battle-tested configuration** so you can skip the setup 
 
 ---
 
-## Demos
+## Demo
 
-<!-- Generated with VHS (https://github.com/charmbracelet/vhs) -->
-<!-- Run: brew install vhs && vhs tapes/<name>.tape -->
+![Install Demo](images/install-demo.gif)
 
+<!-- Uncomment these as you record the GIFs:
 ### Planning with `/plan`
-
 ![Planning](images/plan-command.gif)
 
 ### TDD Workflow with `/tdd`
-
 ![TDD](images/tdd-workflow.gif)
 
 ### Multi-Agent with `/devfleet`
-
 ![DevFleet](images/devfleet.gif)
 
 ### Security Audit Logs
-
 ![Security](images/security-audit.gif)
 
 ### Session Management
-
 ![Sessions](images/session-management.gif)
+-->
 
-> **Generate these demos yourself:** Install [VHS](https://github.com/charmbracelet/vhs), then run `vhs tapes/<name>.tape`. See [tapes/](tapes/) for all tape files.
+> **Record your own demos:** Install [VHS](https://github.com/charmbracelet/vhs), then run `vhs tapes/<name>.tape`. See [tapes/](tapes/) for all tape files.
 
 ---
 
