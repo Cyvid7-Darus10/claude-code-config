@@ -27,27 +27,25 @@ This repo gives you a **battle-tested configuration** so you can skip the setup 
 
 - **Idea to app in one session** — brainstorm, plan, TDD, review, ship
 - **Multi-language support** — TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl
-- **Security by default** — 7-layer protection based on OWASP Agentic Top 10
+- **Security by default** — 8-layer protection based on OWASP Agentic Top 10
 - **Real-time visibility** — every tool call logged, security events audited
 
 ---
 
 ## Demo
 
+### Install
 ![Install Demo](images/install-demo.gif)
 
-<!-- Uncomment these as you record the GIFs:
 ### Planning with `/plan`
 ![Planning](images/plan-command.gif)
 
+<!-- Uncomment these as you record the GIFs:
 ### TDD Workflow with `/tdd`
 ![TDD](images/tdd-workflow.gif)
 
 ### Multi-Agent with `/devfleet`
 ![DevFleet](images/devfleet.gif)
-
-### Security Audit Logs
-![Security](images/security-audit.gif)
 
 ### Session Management
 ![Sessions](images/session-management.gif)
