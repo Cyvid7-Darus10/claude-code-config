@@ -53,8 +53,6 @@ This repo gives you a **battle-tested configuration** so you can skip the setup 
 ![Sessions](images/session-management.gif)
 -->
 
-> **Record your own demos:** Install [VHS](https://github.com/charmbracelet/vhs), then run `vhs tapes/<name>.tape`. See [tapes/](tapes/) for all tape files.
-
 ---
 
 ## Quick Start
