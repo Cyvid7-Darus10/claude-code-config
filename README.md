@@ -1,8 +1,52 @@
+<div align="center">
+
 # Claude Code Config
 
-Production-ready Claude Code configuration for rapid app development. 29 agents, 60 commands, 60 skills, 65 rules, 7-layer security, real-time monitoring — ready to use.
+**Production-ready Claude Code configuration for rapid app development.**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Agents](https://img.shields.io/badge/Agents-29-purple)](agents/)
+[![Commands](https://img.shields.io/badge/Commands-60-green)](commands/)
+[![Skills](https://img.shields.io/badge/Skills-60-orange)](skills/)
+[![Rules](https://img.shields.io/badge/Rules-65-red)](rules/)
+[![Security](https://img.shields.io/badge/Security-7_Layer-critical)](security/SECURITY.md)
+
+29 agents, 60 commands, 60 skills, 65 rules, 7-layer security, real-time monitoring — ready to use.
 
 Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-code) + [obra/superpowers](https://github.com/obra/superpowers).
+
+</div>
+
+---
+
+## Why This Exists
+
+Claude Code is powerful out of the box, but configuring it for real production work — agents, slash commands, TDD workflows, security, monitoring — takes hours of setup and experimentation.
+
+This repo gives you a **battle-tested configuration** so you can skip the setup and start building:
+
+- **Idea to app in one session** — brainstorm, plan, TDD, review, ship
+- **Multi-language support** — TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl
+- **Security by default** — 7-layer protection based on OWASP Agentic Top 10
+- **Real-time visibility** — every tool call logged, security events audited
+
+---
+
+## Screenshots
+
+<!-- Add your own screenshots to the images/ directory -->
+
+| Feature | Preview |
+|---------|---------|
+| Planning with `/plan` | ![Planning](images/plan-command.png) |
+| TDD workflow with `/tdd` | ![TDD](images/tdd-workflow.png) |
+| Multi-agent with `/devfleet` | ![DevFleet](images/devfleet.png) |
+| Security audit logs | ![Security](images/security-audit.png) |
+| Session management | ![Sessions](images/session-management.png) |
+
+> **Note:** To add screenshots, run the commands above in Claude Code and take a screenshot of your terminal. Save them to the `images/` directory. GitHub renders them automatically.
+
+---
 
 ## Quick Start
 
@@ -14,58 +58,187 @@ cd claude-code-config
 
 Restart Claude Code, then try `/plan` or `/tdd`.
 
+---
+
 ## What's Inside
 
 | Component | Count | Highlights |
-|---|---|---|
+|-----------|-------|------------|
 | **Agents** | 29 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `typescript-reviewer`, `build-error-resolver`, language-specific reviewers |
 | **Commands** | 60 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/save-session`, `/resume-session`, `/devfleet`, `/orchestrate`, `/brainstorm` |
 | **Skills** | 60 | Brainstorming, writing-plans, executing-plans, git-worktrees, TDD, systematic-debugging, strategic-compact, continuous-learning |
 | **Rules** | 65 | Coding standards, patterns, security, testing — common + TypeScript, Swift, Python, Go, Rust, Kotlin, Java, C++, PHP, C#, Perl |
-| **Hooks** | 32 | Quality gates, auto-format, type-checking, git push reminders, session persistence, cost tracking, **security audit**, **monitoring** |
+| **Hooks** | 32 | Quality gates, auto-format, type-checking, git push reminders, session persistence, cost tracking, security audit, monitoring |
 | **Security** | 7-layer | Deny lists, sandboxing, sanitization, prompt injection defense, supply chain protection, credential protection, observability |
 | **Monitoring** | 3 hooks | Tool execution logging, security auditing, session metrics |
 | **MCP** | 1 | GitHub MCP server (manage repos, PRs, issues via conversation) |
 | **Sounds** | 3 | Notification sounds for task completion (macOS) |
 
+---
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Input["User Input"]
+        CMD["/plan, /tdd, /verify, ..."]
+        CHAT["Natural language"]
+    end
+
+    subgraph Core["Claude Code Engine"]
+        direction TB
+        AGENTS["29 Agents"]
+        SKILLS["60 Skills"]
+        RULES["65 Rules"]
+    end
+
+    subgraph Quality["Quality Gates"]
+        direction TB
+        HOOKS["32 Hooks"]
+        SEC["7-Layer Security"]
+        MON["Real-Time Monitoring"]
+    end
+
+    subgraph Output["Output"]
+        CODE["Code"]
+        TESTS["Tests"]
+        DOCS["Docs"]
+        PR["PRs"]
+    end
+
+    CMD --> Core
+    CHAT --> Core
+    Core --> Quality
+    Quality --> Output
+    AGENTS <--> SKILLS
+    AGENTS <--> RULES
+    HOOKS --> MON
+    HOOKS --> SEC
+```
+
+---
+
+## Key Workflows
+
+### Idea to App
+
+```mermaid
+graph LR
+    A["/plan"] --> B["Brainstorming Skill"]
+    B --> C["Writing-Plans Skill"]
+    C --> D["/tdd"]
+    D --> E["Ship"]
+
+    style A fill:#6366f1,color:#fff
+    style B fill:#8b5cf6,color:#fff
+    style C fill:#a78bfa,color:#fff
+    style D fill:#6366f1,color:#fff
+    style E fill:#22c55e,color:#fff
+```
+
+### Development Loop
+
+```mermaid
+graph LR
+    A["/tdd"] --> B["Write Tests"]
+    B --> C["Implement"]
+    C --> D["/verify"]
+    D --> E["/code-review"]
+    E --> F["Ship"]
+    F -.-> A
+
+    style A fill:#6366f1,color:#fff
+    style F fill:#22c55e,color:#fff
+```
+
+### Multi-Agent
+
+```mermaid
+graph LR
+    A["/devfleet"] --> B["Agent 1: Frontend"]
+    A --> C["Agent 2: Backend"]
+    A --> D["Agent 3: Tests"]
+    B --> E["/orchestrate"]
+    C --> E
+    D --> E
+    E --> F["Merge & Ship"]
+
+    style A fill:#6366f1,color:#fff
+    style E fill:#f59e0b,color:#000
+    style F fill:#22c55e,color:#fff
+```
+
+### Session Management
+
+```mermaid
+graph LR
+    A["/save-session"] --> B["Persist Context"]
+    B --> C["New Conversation"]
+    C --> D["/resume-session"]
+    D --> E["Continue Where You Left Off"]
+
+    style A fill:#6366f1,color:#fff
+    style D fill:#6366f1,color:#fff
+```
+
+---
+
 ## 7-Layer Security
 
 Production-grade security based on [OWASP Agentic Top 10](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/):
 
-| Layer | Protection |
-|-------|------------|
-| 1. Attack Surface | Minimize access points, restrict `allowedTools` |
-| 2. Sandboxing | Path-based deny lists for `~/.ssh`, `~/.aws`, credentials |
-| 3. Sanitization | Audit external links, detect hidden text |
-| 4. Prompt Injection | Block malicious skills, rules, hooks, CLAUDE.md |
-| 5. Supply Chain | Pin MCP versions, verify packages |
-| 6. Credentials | Separate agent accounts, block env harvesting |
-| 7. Observability | Real-time monitoring, security audit logs |
-
-**Quick security scan:**
+| Layer | Protection | What It Does |
+|:-----:|------------|--------------|
+| 1 | **Attack Surface** | Minimize access points, restrict `allowedTools` |
+| 2 | **Sandboxing** | Path-based deny lists for `~/.ssh`, `~/.aws`, credentials |
+| 3 | **Sanitization** | Audit external links, detect hidden text |
+| 4 | **Prompt Injection** | Block malicious skills, rules, hooks, CLAUDE.md |
+| 5 | **Supply Chain** | Pin MCP versions, verify packages |
+| 6 | **Credentials** | Separate agent accounts, block env harvesting |
+| 7 | **Observability** | Real-time monitoring, security audit logs |
 
 ```bash
+# Quick security scan
 npx ecc-agentshield scan
 ```
 
 See [security/SECURITY.md](security/SECURITY.md) for the full guide.
 
+---
+
 ## Real-Time Monitoring
 
-Track all agent activity with monitoring hooks:
+Track all agent activity with structured JSONL logs:
 
 ```bash
-# View tool execution log
+# Live tool execution log
 tail -f ~/.claude/logs/tool-execution.jsonl | jq
 
-# View security alerts
+# Live security alerts
 tail -f ~/.claude/logs/security-audit.jsonl | jq
 
-# View session metrics
+# Session summary metrics
 cat ~/.claude/logs/session-metrics.jsonl | jq
 ```
 
+```mermaid
+graph LR
+    A["Tool Call"] --> B["log-tool-use.sh"]
+    A --> C["security-audit.sh"]
+    D["Session End"] --> E["session-metrics.sh"]
+
+    B --> F["tool-execution.jsonl"]
+    C --> G["security-audit.jsonl"]
+    E --> H["session-metrics.jsonl"]
+
+    style F fill:#3b82f6,color:#fff
+    style G fill:#ef4444,color:#fff
+    style H fill:#22c55e,color:#fff
+```
+
 See [monitoring/README.md](monitoring/README.md) for dashboard setup.
+
+---
 
 ## Selective Install
 
@@ -82,31 +255,7 @@ Install only what you need:
 
 Available components: `agents`, `commands`, `skills`, `rules`, `hooks`, `sounds`, `mcp`, `security`, `monitoring`
 
-## Key Workflows
-
-### Idea to App
-
-```
-/plan → Brainstorming skill refines your idea → Writing-plans creates actionable steps → /tdd builds it
-```
-
-### Development Loop
-
-```
-/tdd → Write tests first → Implement → /verify → /code-review → Ship
-```
-
-### Multi-Agent
-
-```
-/devfleet → Parallel agents work on different parts → /orchestrate coordinates them
-```
-
-### Session Management
-
-```
-/save-session → Persist context → (new conversation) → /resume-session → Continue where you left off
-```
+---
 
 ## MCP Server Setup
 
@@ -124,21 +273,30 @@ gh auth token
 # Edit ~/.claude/mcp.json and replace <YOUR_GITHUB_TOKEN>
 ```
 
+---
+
 ## Sound Notifications
 
 Hooks play sounds on task completion. macOS only (uses `afplay`).
 
 | Sound | Event | File |
-|---|---|---|
+|-------|-------|------|
 | "Jobs done" | Session stops | `sounds/jobs-done.mp3` |
 | "Work work" | Notifications | `sounds/work-work.mp3` |
 | "Quest complete" | (Available) | `sounds/quest-complete.mp3` |
 
-**Linux:** Replace `afplay` with `paplay` or `aplay` in `settings.json`.
-**Windows/WSL:** Replace with `powershell.exe -c (New-Object Media.SoundPlayer 'path').PlaySync()`.
-**Disable:** Remove the `hooks` section from `settings.json`.
+<details>
+<summary><b>Cross-platform setup</b></summary>
 
-## Structure
+- **Linux:** Replace `afplay` with `paplay` or `aplay` in `settings.json`
+- **Windows/WSL:** Replace with `powershell.exe -c (New-Object Media.SoundPlayer 'path').PlaySync()`
+- **Disable:** Remove the `hooks` section from `settings.json`
+
+</details>
+
+---
+
+## Project Structure
 
 ```
 claude-code-config/
@@ -163,17 +321,15 @@ claude-code-config/
 │   ├── swift/           # Swift-specific
 │   └── ...              # + python, golang, rust, kotlin, java, cpp, php, csharp, perl
 ├── security/            # 7-layer security framework
-│   └── SECURITY.md      # Full security guide
+│   └── SECURITY.md
 ├── monitoring/          # Real-time observability
-│   ├── hooks/           # Monitoring hook scripts
-│   │   ├── log-tool-use.sh     # Log all tool executions
-│   │   ├── security-audit.sh   # Detect suspicious operations
-│   │   └── session-metrics.sh  # Capture session metrics
-│   └── README.md        # Monitoring setup guide
+│   ├── hooks/           # log-tool-use.sh, security-audit.sh, session-metrics.sh
+│   └── README.md
 ├── hooks/               # Hook configurations (hooks.json)
 ├── scripts/hooks/       # 29 hook scripts (quality gates, formatting, etc.)
 ├── sounds/              # Notification MP3s
 ├── mcp-configs/         # Reference MCP server configurations
+├── images/              # Screenshots and diagrams
 ├── settings.json        # Claude Code settings with security deny lists
 ├── mcp.json             # GitHub MCP server config (add your token)
 ├── install.sh           # Installer (supports selective install/uninstall)
@@ -182,9 +338,15 @@ claude-code-config/
 └── README.md
 ```
 
+---
+
 ## Customization
 
-**Add your own command:** Create `~/.claude/commands/my-command.md` with:
+<details>
+<summary><b>Add your own command</b></summary>
+
+Create `~/.claude/commands/my-command.md`:
+
 ```markdown
 ---
 description: What my command does
@@ -192,7 +354,13 @@ description: What my command does
 Instructions for Claude when this command is invoked...
 ```
 
-**Add your own skill:** Create `~/.claude/skills/my-skill/SKILL.md` with:
+</details>
+
+<details>
+<summary><b>Add your own skill</b></summary>
+
+Create `~/.claude/skills/my-skill/SKILL.md`:
+
 ```markdown
 ---
 name: my-skill
@@ -201,7 +369,13 @@ description: When to activate this skill
 Domain knowledge and instructions...
 ```
 
-**Add your own agent:** Create `~/.claude/agents/my-agent.md` with:
+</details>
+
+<details>
+<summary><b>Add your own agent</b></summary>
+
+Create `~/.claude/agents/my-agent.md`:
+
 ```markdown
 ---
 name: my-agent
@@ -212,16 +386,28 @@ model: sonnet
 System prompt for the agent...
 ```
 
+</details>
+
+---
+
 ## Credits
 
 - **[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** by Affaan Mustafa — Agents, commands, rules, hooks, scripts, security guide. The foundation.
 - **[superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — Brainstorming, planning, git worktrees, TDD skills. The ideation workflow.
 - **[claude-code-hooks-multi-agent-observability](https://github.com/disler/claude-code-hooks-multi-agent-observability)** by disler — Monitoring patterns and dashboard inspiration.
 
+---
+
 ## License
 
-MIT - See [LICENSE](LICENSE)
+MIT — See [LICENSE](LICENSE)
 
-## Author
+---
 
-Cyrus David Pastelero ([@Cyvid7-Darus10](https://github.com/Cyvid7-Darus10))
+<div align="center">
+
+Made by [Cyrus David Pastelero](https://github.com/Cyvid7-Darus10)
+
+If this helped you, consider giving it a star!
+
+</div>
