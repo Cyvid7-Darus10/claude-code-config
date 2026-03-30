@@ -281,11 +281,11 @@ gh auth token
 ```
 
 <details>
-<summary><b>Optional: Claude Fleet (multi-agent orchestration)</b></summary>
+<summary><b>Optional: Claude Mission Control (multi-agent orchestration)</b></summary>
 
-[Claude Fleet](https://github.com/Cyvid7-Darus10/claude-fleet) adds persistent mission tracking, dependency DAGs, scheduled agents, and a web dashboard on top of Claude Code's built-in subagents. Most users won't need this — Claude Code's native `Agent` tool with `isolation: "worktree"` handles parallel work well.
+[Claude Mission Control](https://github.com/Cyvid7-Darus10/claude-mission-control) adds persistent mission tracking, dependency DAGs, scheduled agents, and a web dashboard on top of Claude Code's built-in subagents. Most users won't need this — Claude Code's native `Agent` tool with `isolation: "worktree"` handles parallel work well.
 
-**Use Claude Fleet when you need:**
+**Use Claude Mission Control when you need:**
 - Mission dashboard that survives conversation restarts
 - Dependency chains ("don't start tests until API is done")
 - Scheduled cron agents (nightly tests, daily reviews)
@@ -293,11 +293,11 @@ gh auth token
 
 ```bash
 # 1. Clone and start
-git clone https://github.com/Cyvid7-Darus10/claude-fleet.git ~/claude-fleet
-cd ~/claude-fleet && ./start.sh
+git clone https://github.com/Cyvid7-Darus10/claude-mission-control.git ~/claude-mission-control
+cd ~/claude-mission-control && ./start.sh
 
 # 2. Connect to Claude Code
-claude mcp add claude-fleet --transport http http://localhost:18801/mcp
+claude mcp add claude-mission-control --transport http http://localhost:18801/mcp
 ```
 
 Requires Python 3.11+, Node.js 18+, and Claude CLI.
