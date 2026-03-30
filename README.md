@@ -265,7 +265,6 @@ Pre-configured MCP servers are installed to `~/.claude/mcp.json`:
 | **playwright** | Browser automation & testing | None — works immediately |
 | **magic** | Magic UI components for React | None — works immediately |
 | **github** | Manage repos, PRs, issues | GitHub token + Docker |
-| **devfleet** | Multi-agent orchestration | [Claude Fleet](https://github.com/Cyvid7-Darus10/claude-fleet) server (see below) |
 
 ### GitHub MCP
 
@@ -281,24 +280,29 @@ gh auth token
 # Edit ~/.claude/mcp.json and replace <YOUR_GITHUB_TOKEN>
 ```
 
-### Claude Fleet Setup (Optional)
+<details>
+<summary><b>Optional: Claude Fleet (multi-agent orchestration)</b></summary>
 
-[Claude Fleet](https://github.com/Cyvid7-Darus10/claude-fleet) lets you dispatch parallel Claude Code agents that work in isolated git worktrees.
+[Claude Fleet](https://github.com/Cyvid7-Darus10/claude-fleet) adds persistent mission tracking, dependency DAGs, scheduled agents, and a web dashboard on top of Claude Code's built-in subagents. Most users won't need this — Claude Code's native `Agent` tool with `isolation: "worktree"` handles parallel work well.
+
+**Use Claude Fleet when you need:**
+- Mission dashboard that survives conversation restarts
+- Dependency chains ("don't start tests until API is done")
+- Scheduled cron agents (nightly tests, daily reviews)
+- Cost tracking across all agents
 
 ```bash
-# 1. Clone
+# 1. Clone and start
 git clone https://github.com/Cyvid7-Darus10/claude-fleet.git ~/claude-fleet
-
-# 2. Start the server (keep this terminal open)
 cd ~/claude-fleet && ./start.sh
 
-# UI: http://localhost:3100
-# API: http://localhost:18801
+# 2. Connect to Claude Code
+claude mcp add claude-fleet --transport http http://localhost:18801/mcp
 ```
 
-Once running, restart Claude Code and Claude Fleet will connect automatically. Use `/devfleet` to dispatch parallel agents.
+Requires Python 3.11+, Node.js 18+, and Claude CLI.
 
-> **Note:** Claude Fleet requires Python 3.11+, Node.js 18+, and Claude CLI installed.
+</details>
 
 ---
 
