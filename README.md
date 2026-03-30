@@ -32,19 +32,32 @@ This repo gives you a **battle-tested configuration** so you can skip the setup 
 
 ---
 
-## Screenshots
+## Demos
 
-<!-- Add your own screenshots to the images/ directory -->
+<!-- Generated with VHS (https://github.com/charmbracelet/vhs) -->
+<!-- Run: brew install vhs && vhs tapes/<name>.tape -->
 
-| Feature | Preview |
-|---------|---------|
-| Planning with `/plan` | ![Planning](images/plan-command.png) |
-| TDD workflow with `/tdd` | ![TDD](images/tdd-workflow.png) |
-| Multi-agent with `/devfleet` | ![DevFleet](images/devfleet.png) |
-| Security audit logs | ![Security](images/security-audit.png) |
-| Session management | ![Sessions](images/session-management.png) |
+### Planning with `/plan`
 
-> **Note:** To add screenshots, run the commands above in Claude Code and take a screenshot of your terminal. Save them to the `images/` directory. GitHub renders them automatically.
+![Planning](images/plan-command.gif)
+
+### TDD Workflow with `/tdd`
+
+![TDD](images/tdd-workflow.gif)
+
+### Multi-Agent with `/devfleet`
+
+![DevFleet](images/devfleet.gif)
+
+### Security Audit Logs
+
+![Security](images/security-audit.gif)
+
+### Session Management
+
+![Sessions](images/session-management.gif)
+
+> **Generate these demos yourself:** Install [VHS](https://github.com/charmbracelet/vhs), then run `vhs tapes/<name>.tape`. See [tapes/](tapes/) for all tape files.
 
 ---
 

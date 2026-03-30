@@ -59,27 +59,27 @@ if [ ${#COMPONENTS[@]} -eq 0 ]; then
   COMPONENTS=("${ALL_COMPONENTS[@]}")
 fi
 
-# Map component names to directories
-declare -A COMPONENT_DIRS=(
-  [agents]="agents"
-  [commands]="commands"
-  [skills]="skills"
-  [rules]="rules"
-  [hooks]="hooks scripts"
-  [sounds]="sounds"
-  [mcp]="mcp-configs"
-)
-
-declare -A COMPONENT_FILES=(
-  [agents]="AGENTS.md"
-  [hooks]="hooks"
-)
+# Map component names to directories (compatible with bash 3.x on macOS)
+get_dirs_for_component() {
+  case "$1" in
+    agents)   echo "agents" ;;
+    commands) echo "commands" ;;
+    skills)   echo "skills" ;;
+    rules)    echo "rules" ;;
+    hooks)    echo "hooks scripts" ;;
+    sounds)   echo "sounds" ;;
+    mcp)      echo "mcp-configs" ;;
+    security) echo "security" ;;
+    monitoring) echo "monitoring" ;;
+    *)        echo "" ;;
+  esac
+}
 
 # --- Uninstall ---
 if [ "$UNINSTALL" = true ]; then
   echo -e "${YELLOW}Uninstalling claude-code-config from $CLAUDE_DIR${NC}"
   for comp in "${COMPONENTS[@]}"; do
-    dirs=${COMPONENT_DIRS[$comp]}
+    dirs=$(get_dirs_for_component "$comp")
     for dir in $dirs; do
       if [ -d "$CLAUDE_DIR/$dir" ]; then
         if [ "$DRY_RUN" = true ]; then
@@ -106,7 +106,7 @@ mkdir -p "$CLAUDE_DIR"
 if [ "$BACKUP" = true ]; then
   HAS_EXISTING=false
   for comp in "${COMPONENTS[@]}"; do
-    dirs=${COMPONENT_DIRS[$comp]}
+    dirs=$(get_dirs_for_component "$comp")
     for dir in $dirs; do
       [ -d "$CLAUDE_DIR/$dir" ] && HAS_EXISTING=true
     done
@@ -118,7 +118,7 @@ if [ "$BACKUP" = true ]; then
     else
       mkdir -p "$BACKUP_DIR"
       for comp in "${COMPONENTS[@]}"; do
-        dirs=${COMPONENT_DIRS[$comp]}
+        dirs=$(get_dirs_for_component "$comp")
         for dir in $dirs; do
           [ -d "$CLAUDE_DIR/$dir" ] && cp -r "$CLAUDE_DIR/$dir" "$BACKUP_DIR/$dir" 2>/dev/null || true
         done
@@ -133,7 +133,7 @@ fi
 # Install components
 INSTALLED=0
 for comp in "${COMPONENTS[@]}"; do
-  dirs=${COMPONENT_DIRS[$comp]}
+  dirs=$(get_dirs_for_component "$comp")
   for dir in $dirs; do
     if [ -d "$SCRIPT_DIR/$dir" ]; then
       count=$(find "$SCRIPT_DIR/$dir" -type f | wc -l | tr -d ' ')
@@ -198,7 +198,7 @@ if [ "$DRY_RUN" = false ]; then
   }
 
   for comp in "${COMPONENTS[@]}"; do
-    dirs=${COMPONENT_DIRS[$comp]}
+    dirs=$(get_dirs_for_component "$comp")
     for dir in $dirs; do
       check_dir "$dir"
     done

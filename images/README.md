@@ -1,30 +1,34 @@
-# Screenshots Guide
+# Demo GIFs
 
-Capture these screenshots from your terminal running Claude Code and save them here.
-GitHub will render them in the main README automatically.
+Generated with [VHS](https://github.com/charmbracelet/vhs) from tape files in `tapes/`.
 
-## Required Screenshots
+## Generate All Demos
 
-| Filename | What to Capture |
-|----------|----------------|
-| `plan-command.png` | Run `/plan` with a project idea — show the planning output |
-| `tdd-workflow.png` | Run `/tdd` — show test-first workflow in action |
-| `devfleet.png` | Run `/devfleet` — show parallel agents being dispatched |
-| `security-audit.png` | Show `tail -f ~/.claude/logs/security-audit.jsonl \| jq` output |
-| `session-management.png` | Show `/save-session` then `/resume-session` flow |
+```bash
+# Install VHS (one-time)
+brew install vhs
+
+# Generate all GIFs
+for tape in tapes/*.tape; do
+  vhs "$tape"
+done
+```
+
+## Individual Demos
+
+| Tape File | Output | What It Shows |
+|-----------|--------|---------------|
+| `tapes/plan-command.tape` | `plan-command.gif` | `/plan` creating an implementation plan |
+| `tapes/tdd-workflow.tape` | `tdd-workflow.gif` | `/tdd` test-first development flow |
+| `tapes/devfleet.tape` | `devfleet.gif` | `/devfleet` dispatching parallel agents |
+| `tapes/security-audit.tape` | `security-audit.gif` | Security + tool execution + session logs |
+| `tapes/session-management.tape` | `session-management.gif` | `/save-session` and `/resume-session` |
+| `tapes/install.tape` | `install-demo.gif` | Installer with `--dry-run` and selective install |
 
 ## Tips
 
-- Use a clean terminal with a dark theme for contrast
-- Terminal width ~120 columns works best
-- Crop to just the relevant output (no full desktop)
-- PNG format, reasonable resolution (1200-1600px wide)
-- Tools like [iTerm2](https://iterm2.com/) on macOS or [Windows Terminal](https://github.com/microsoft/terminal) give clean output
-
-## Optional Screenshots
-
-- Agent orchestration with `/orchestrate`
-- Code review output with `/code-review`
-- Brainstorming session with the brainstorming skill
-- Monitoring dashboard with `jq` formatted logs
-- Install script output (`./install.sh`)
+- Edit tape files in `tapes/` to adjust timing, theme, or commands
+- Re-run `vhs tapes/<name>.tape` to regenerate after changes
+- VHS supports themes: Dracula (default), Monokai, Solarized, etc.
+- Adjust `Sleep` durations if Claude takes longer to respond
+- Set `Set FontSize 16` for readable GIFs on GitHub
