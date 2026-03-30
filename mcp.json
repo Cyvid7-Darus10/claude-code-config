@@ -36,6 +36,6 @@
     "context7": "Live documentation lookup for any library. Zero config.",
     "playwright": "Browser automation and testing. Zero config.",
     "magic": "Magic UI components for React. Zero config.",
-    "devfleet": "Multi-agent orchestration. Requires: git clone https://github.com/LEC-AI/claude-devfleet && cd claude-devfleet && ./start.sh"
+    "devfleet": "Multi-agent orchestration. Requires: git clone https://github.com/Cyvid7-Darus10/claude-fleet && cd claude-fleet && ./start.sh"
   }
 }

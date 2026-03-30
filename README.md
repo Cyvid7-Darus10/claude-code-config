@@ -265,7 +265,7 @@ Pre-configured MCP servers are installed to `~/.claude/mcp.json`:
 | **playwright** | Browser automation & testing | None — works immediately |
 | **magic** | Magic UI components for React | None — works immediately |
 | **github** | Manage repos, PRs, issues | GitHub token + Docker |
-| **devfleet** | Multi-agent orchestration | DevFleet server (see below) |
+| **devfleet** | Multi-agent orchestration | [Claude Fleet](https://github.com/Cyvid7-Darus10/claude-fleet) server (see below) |
 
 ### GitHub MCP
 
@@ -281,24 +281,24 @@ gh auth token
 # Edit ~/.claude/mcp.json and replace <YOUR_GITHUB_TOKEN>
 ```
 
-### DevFleet Setup (Optional)
+### Claude Fleet Setup (Optional)
 
-[DevFleet](https://github.com/LEC-AI/claude-devfleet) lets you dispatch parallel Claude Code agents that work in isolated git worktrees.
+[Claude Fleet](https://github.com/Cyvid7-Darus10/claude-fleet) lets you dispatch parallel Claude Code agents that work in isolated git worktrees.
 
 ```bash
 # 1. Clone
-git clone https://github.com/LEC-AI/claude-devfleet.git ~/devfleet
+git clone https://github.com/Cyvid7-Darus10/claude-fleet.git ~/claude-fleet
 
 # 2. Start the server (keep this terminal open)
-cd ~/devfleet && ./start.sh
+cd ~/claude-fleet && ./start.sh
 
 # UI: http://localhost:3100
 # API: http://localhost:18801
 ```
 
-Once running, restart Claude Code and DevFleet will connect automatically. Use `/devfleet` to dispatch parallel agents.
+Once running, restart Claude Code and Claude Fleet will connect automatically. Use `/devfleet` to dispatch parallel agents.
 
-> **Note:** DevFleet requires Python 3.11+, Node.js 18+, and Claude CLI installed.
+> **Note:** Claude Fleet requires Python 3.11+, Node.js 18+, and Claude CLI installed.
 
 ---
 
