@@ -17,7 +17,15 @@
       "Bash(curl * | bash)",
       "Bash(wget * | bash)",
       "Bash(curl * | sh)",
-      "Bash(wget * | sh)"
+      "Bash(wget * | sh)",
+      "Bash(curl * -d *)",
+      "Bash(curl * --data *)",
+      "Bash(curl * -F *)",
+      "Bash(wget --post-data *)",
+      "Bash(git remote add *)",
+      "Bash(npm publish*)",
+      "Bash(nc *)",
+      "Bash(netcat *)"
     ]
   },
   "hooks": {

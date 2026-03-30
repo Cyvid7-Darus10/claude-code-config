@@ -68,7 +68,15 @@ Every integration is a door. Minimize access points:
       "Bash(rm -rf *)",
       "Bash(curl * | bash)",
       "Bash(ssh *)",
-      "Bash(scp *)"
+      "Bash(scp *)",
+      "Bash(curl * -d *)",
+      "Bash(curl * --data *)",
+      "Bash(curl * -F *)",
+      "Bash(wget --post-data *)",
+      "Bash(git remote add *)",
+      "Bash(npm publish*)",
+      "Bash(nc *)",
+      "Bash(netcat *)"
     ]
   }
 }
@@ -216,6 +224,8 @@ Before EVERY commit:
 - [ ] Hooks reviewed for suspicious commands
 - [ ] MCP servers verified
 - [ ] Environment variables not exposed
+- [ ] Outbound data transfer deny lists configured
+- [ ] No unauthorized git remotes added
 
 ## GitHub Action
 

@@ -1,23 +1,25 @@
 # Plan Command Demo
-# Records: /plan slash command creating an implementation plan
+# Strategy: Use short sleeps so the GIF only captures key moments.
+# VHS records the screen regardless of whether Claude finished.
+# The viewer sees typing → output appearing → done. No dead air.
 
 Output images/plan-command.gif
-Set FontSize 16
-Set Width 1200
-Set Height 800
+Set FontSize 14
+Set Width 1400
+Set Height 900
 Set Theme "Dracula"
 Set Padding 20
-Set TypingSpeed 50ms
+Set TypingSpeed 80ms
 Set Shell "zsh"
 
+# Start Claude
 Type "claude"
 Enter
-Sleep 3s
+Sleep 5s
 
-Type "/plan Build a REST API for a todo app with auth, CRUD endpoints, and PostgreSQL"
+# Type the command
+Type "/plan Build a simple todo REST API"
 Enter
-Sleep 15s
 
-# Scroll to show more output if needed
-Type "q"
-Sleep 1s
+# Record just enough to show output streaming in
+Sleep 60s
