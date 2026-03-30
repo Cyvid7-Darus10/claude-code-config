@@ -40,10 +40,10 @@ This repo gives you a **battle-tested configuration** so you can skip the setup 
 ### Planning with `/plan`
 ![Planning](images/plan-command.gif)
 
-<!-- Uncomment these as you record the GIFs:
 ### TDD Workflow with `/tdd`
 ![TDD](images/tdd-workflow.gif)
 
+<!-- Uncomment these as you record the GIFs:
 ### Multi-Agent with `/devfleet`
 ![DevFleet](images/devfleet.gif)
 
