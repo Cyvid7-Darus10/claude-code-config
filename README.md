@@ -255,9 +255,19 @@ Available components: `agents`, `commands`, `skills`, `rules`, `hooks`, `sounds`
 
 ---
 
-## MCP Server Setup
+## MCP Servers
 
-The GitHub MCP server lets Claude manage repos, PRs, and issues directly.
+Pre-configured MCP servers are installed to `~/.claude/mcp.json`:
+
+| MCP | What it does | Setup |
+|-----|-------------|-------|
+| **context7** | Live docs lookup for any library | None — works immediately |
+| **playwright** | Browser automation & testing | None — works immediately |
+| **magic** | Magic UI components for React | None — works immediately |
+| **github** | Manage repos, PRs, issues | GitHub token + Docker |
+| **devfleet** | Multi-agent orchestration | DevFleet server (see below) |
+
+### GitHub MCP
 
 **Prerequisites:** Docker running (`docker ps` to verify)
 
@@ -270,6 +280,25 @@ gh auth token
 # Add token to config
 # Edit ~/.claude/mcp.json and replace <YOUR_GITHUB_TOKEN>
 ```
+
+### DevFleet Setup (Optional)
+
+[DevFleet](https://github.com/LEC-AI/claude-devfleet) lets you dispatch parallel Claude Code agents that work in isolated git worktrees.
+
+```bash
+# 1. Clone
+git clone https://github.com/LEC-AI/claude-devfleet.git ~/devfleet
+
+# 2. Start the server (keep this terminal open)
+cd ~/devfleet && ./start.sh
+
+# UI: http://localhost:3100
+# API: http://localhost:18801
+```
+
+Once running, restart Claude Code and DevFleet will connect automatically. Use `/devfleet` to dispatch parallel agents.
+
+> **Note:** DevFleet requires Python 3.11+, Node.js 18+, and Claude CLI installed.
 
 ---
 
