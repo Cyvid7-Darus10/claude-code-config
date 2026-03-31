@@ -281,26 +281,31 @@ gh auth token
 ```
 
 <details>
-<summary><b>Optional: Claude Mission Control (multi-agent orchestration)</b></summary>
+<summary><b>Optional: Claude Mission Control (real-time agent dashboard)</b></summary>
 
-[Claude Mission Control](https://github.com/Cyvid7-Darus10/claude-mission-control) adds persistent mission tracking, dependency DAGs, scheduled agents, and a web dashboard on top of Claude Code's built-in subagents. Most users won't need this — Claude Code's native `Agent` tool with `isolation: "worktree"` handles parallel work well.
+[Claude Mission Control](https://github.com/Cyvid7-Darus10/claude-mission-control) is a Palantir-style command center that shows what your Claude Code agents are doing in real-time. It connects via hooks — every tool call, file edit, and bash command is streamed to the dashboard.
 
-**Use Claude Mission Control when you need:**
-- Mission dashboard that survives conversation restarts
-- Dependency chains ("don't start tests until API is done")
-- Scheduled cron agents (nightly tests, daily reviews)
-- Cost tracking across all agents
+**Use it when you need:**
+- See all active agents and what they're working on at a glance
+- Assign missions with dependency tracking ("tests wait on API")
+- Send instructions to running agents from the dashboard
+- Activity timeline with stuck agent and loop detection
+- Mission history that survives conversation restarts
 
 ```bash
-# 1. Clone and start
+# 1. Clone and install
 git clone https://github.com/Cyvid7-Darus10/claude-mission-control.git ~/claude-mission-control
-cd ~/claude-mission-control && ./start.sh
+cd ~/claude-mission-control && npm install && npm rebuild better-sqlite3
 
-# 2. Connect to Claude Code
-claude mcp add mission-control --transport http http://localhost:18801/mcp
+# 2. Install hooks into Claude Code
+npx tsx src/index.ts install
+
+# 3. Start the dashboard
+npx tsx src/index.ts
+# Open http://localhost:4280
 ```
 
-Requires Python 3.11+, Node.js 18+, and Claude CLI.
+Requires Node.js 18+. No Python, no Docker.
 
 </details>
 
