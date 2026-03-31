@@ -297,7 +297,7 @@ git clone https://github.com/Cyvid7-Darus10/claude-mission-control.git ~/claude-
 cd ~/claude-mission-control && ./start.sh
 
 # 2. Connect to Claude Code
-claude mcp add claude-mission-control --transport http http://localhost:18801/mcp
+claude mcp add mission-control --transport http http://localhost:18801/mcp
 ```
 
 Requires Python 3.11+, Node.js 18+, and Claude CLI.
