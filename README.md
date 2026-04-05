@@ -11,7 +11,7 @@
 [![Rules](https://img.shields.io/badge/Rules-65-red)](rules/)
 [![Security](https://img.shields.io/badge/Security-7_Layer-critical)](security/SECURITY.md)
 
-29 agents, 60 commands, 60 skills, 65 rules, 7-layer security, real-time monitoring — ready to use.
+29 agents, 60 commands, 60 skills, 65 rules, 7-layer security, intelligent routing, real-time monitoring — ready to use.
 
 Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-code) + [obra/superpowers](https://github.com/obra/superpowers).
 
@@ -26,9 +26,11 @@ Claude Code is powerful out of the box, but configuring it for real production w
 This repo gives you a **battle-tested configuration** so you can skip the setup and start building:
 
 - **Idea to app in one session** — brainstorm, plan, TDD, review, ship
+- **Intelligent routing** — auto-suggests the right agent/workflow based on your prompt
 - **Multi-language support** — TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl
-- **Security by default** — 8-layer protection based on OWASP Agentic Top 10
+- **Security by default** — 7-layer protection based on OWASP Agentic Top 10
 - **Real-time visibility** — every tool call logged, security events audited
+- **Session continuity** — auto-persists and restores context across conversations
 
 ---
 
@@ -68,7 +70,7 @@ Restart Claude Code, then try `/plan` or `/tdd`.
 | **Rules** | 65 | Coding standards, patterns, security, testing — common + TypeScript, Swift, Python, Go, Rust, Kotlin, Java, C++, PHP, C#, Perl |
 | **Hooks** | 32 | Quality gates, auto-format, type-checking, git push reminders, session persistence, cost tracking, security audit, monitoring |
 | **Security** | 7-layer | Deny lists, sandboxing, sanitization, prompt injection defense, supply chain protection, credential protection, observability |
-| **Monitoring** | 3 hooks | Tool execution logging, security auditing, session metrics |
+| **Monitoring** | 7 hooks | Tool execution logging, security auditing, session metrics, task routing, session persistence, compaction checkpoints |
 | **MCP** | 1 | GitHub MCP server (manage repos, PRs, issues via conversation) |
 | **Sounds** | 3 | Notification sounds for task completion (macOS) |
 
@@ -81,6 +83,11 @@ graph TB
     subgraph Input["User Input"]
         CMD["/plan, /tdd, /verify, ..."]
         CHAT["Natural language"]
+    end
+
+    subgraph Router["Intelligent Routing"]
+        TR["Task Router"]
+        SR["Session Restore"]
     end
 
     subgraph Core["Claude Code Engine"]
@@ -97,6 +104,11 @@ graph TB
         MON["Real-Time Monitoring"]
     end
 
+    subgraph Persistence["Session Continuity"]
+        CP["Compaction Checkpoints"]
+        SP["Session Persistence"]
+    end
+
     subgraph Output["Output"]
         CODE["Code"]
         TESTS["Tests"]
@@ -104,10 +116,12 @@ graph TB
         PR["PRs"]
     end
 
-    CMD --> Core
-    CHAT --> Core
+    CMD --> Router
+    CHAT --> Router
+    Router --> Core
     Core --> Quality
     Quality --> Output
+    Quality --> Persistence
     AGENTS <--> SKILLS
     AGENTS <--> RULES
     HOOKS --> MON
@@ -166,6 +180,50 @@ graph LR
     style F fill:#22c55e,color:#fff
 ```
 
+### Intelligent Task Routing
+
+Prompts are automatically analyzed and routed to the best agent/workflow:
+
+```mermaid
+graph LR
+    A["User Prompt"] --> B["Task Router"]
+    B -->|"build me..."| C["/plan → planner"]
+    B -->|"fix this bug..."| D["/tdd → tdd-guide"]
+    B -->|"review my code..."| E["code-reviewer"]
+    B -->|"security audit..."| F["security-reviewer"]
+    B -->|"build error..."| G["build-error-resolver"]
+
+    style A fill:#f59e0b,color:#000
+    style B fill:#6366f1,color:#fff
+    style C fill:#22c55e,color:#fff
+    style D fill:#22c55e,color:#fff
+    style E fill:#22c55e,color:#fff
+    style F fill:#22c55e,color:#fff
+    style G fill:#22c55e,color:#fff
+```
+
+Routes detected: `plan-first`, `architecture`, `debug`, `tdd`, `security`, `review`, `refactor`, `build-fix`, `docs`, `performance`
+
+### Session Continuity
+
+Sessions are automatically persisted and restored — no manual `/save-session` needed:
+
+```mermaid
+graph LR
+    A["Session Start"] --> B["session-restore.sh"]
+    B --> C["Load Previous Context"]
+    C --> D["Work..."]
+    D --> E["Context Compaction"]
+    E --> F["pre-compact-checkpoint.sh"]
+    F --> D
+    D --> G["Session End"]
+    G --> H["session-persist.sh"]
+
+    style B fill:#3b82f6,color:#fff
+    style F fill:#f59e0b,color:#000
+    style H fill:#22c55e,color:#fff
+```
+
 ### Session Management
 
 ```mermaid
@@ -215,23 +273,37 @@ tail -f ~/.claude/logs/tool-execution.jsonl | jq
 # Live security alerts
 tail -f ~/.claude/logs/security-audit.jsonl | jq
 
+# Task routing decisions
+tail -f ~/.claude/logs/task-router.jsonl | jq
+
 # Session summary metrics
 cat ~/.claude/logs/session-metrics.jsonl | jq
 ```
 
 ```mermaid
 graph LR
-    A["Tool Call"] --> B["log-tool-use.sh"]
-    A --> C["security-audit.sh"]
-    D["Session End"] --> E["session-metrics.sh"]
+    A["User Prompt"] --> R["task-router.sh"]
+    A --> B["Tool Call"]
+    B --> C["log-tool-use.sh"]
+    B --> D["security-audit.sh"]
+    E["Compaction"] --> F["pre-compact-checkpoint.sh"]
+    G["Session End"] --> H["session-metrics.sh"]
+    G --> I["session-persist.sh"]
+    J["Session Start"] --> K["session-restore.sh"]
 
-    B --> F["tool-execution.jsonl"]
-    C --> G["security-audit.jsonl"]
-    E --> H["session-metrics.jsonl"]
+    R --> L["task-router.jsonl"]
+    C --> M["tool-execution.jsonl"]
+    D --> N["security-audit.jsonl"]
+    H --> O["session-metrics.jsonl"]
+    F --> P["checkpoints/"]
+    I --> Q["sessions/"]
 
-    style F fill:#3b82f6,color:#fff
-    style G fill:#ef4444,color:#fff
-    style H fill:#22c55e,color:#fff
+    style L fill:#f59e0b,color:#000
+    style M fill:#3b82f6,color:#fff
+    style N fill:#ef4444,color:#fff
+    style O fill:#22c55e,color:#fff
+    style P fill:#8b5cf6,color:#fff
+    style Q fill:#8b5cf6,color:#fff
 ```
 
 See [monitoring/README.md](monitoring/README.md) for dashboard setup.
@@ -359,7 +431,14 @@ claude-code-config/
 ├── security/            # 7-layer security framework
 │   └── SECURITY.md
 ├── monitoring/          # Real-time observability
-│   ├── hooks/           # log-tool-use.sh, security-audit.sh, session-metrics.sh
+│   ├── hooks/           # 7 monitoring hooks
+│   │   ├── task-router.sh         # Intelligent prompt → agent routing
+│   │   ├── session-restore.sh     # Restore context on SessionStart
+│   │   ├── session-persist.sh     # Auto-save state on Stop
+│   │   ├── pre-compact-checkpoint.sh # Checkpoint before compaction
+│   │   ├── log-tool-use.sh        # Tool execution logging
+│   │   ├── security-audit.sh      # Security event detection
+│   │   └── session-metrics.sh     # Session summary metrics
 │   └── README.md
 ├── hooks/               # Hook configurations (hooks.json)
 ├── scripts/hooks/       # 29 hook scripts (quality gates, formatting, etc.)
@@ -431,6 +510,7 @@ System prompt for the agent...
 - **[everything-claude-code](https://github.com/affaan-m/everything-claude-code)** by Affaan Mustafa — Agents, commands, rules, hooks, scripts, security guide. The foundation.
 - **[superpowers](https://github.com/obra/superpowers)** by Jesse Vincent — Brainstorming, planning, git worktrees, TDD skills. The ideation workflow.
 - **[claude-code-hooks-multi-agent-observability](https://github.com/disler/claude-code-hooks-multi-agent-observability)** by disler — Monitoring patterns and dashboard inspiration.
+- **[ruflo](https://github.com/ruvnet/ruflo)** by RuvNet — Intelligent task routing, session persistence, and pre-compaction checkpoint patterns.
 
 ---
 

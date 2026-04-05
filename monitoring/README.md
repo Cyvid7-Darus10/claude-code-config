@@ -1,6 +1,6 @@
 # Claude Code Monitoring
 
-Real-time observability for Claude Code agents. Track tool usage, security events, and session metrics.
+Real-time observability for Claude Code agents. Track tool usage, security events, session metrics, intelligent routing, and session continuity.
 
 ## Quick Start
 
@@ -11,6 +11,28 @@ Add to your `~/.claude/settings.json`:
 ```json
 {
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [{
+          "type": "command",
+          "timeout": 5,
+          "command": "\"$HOME/.claude/monitoring/hooks/task-router.sh\""
+        }],
+        "description": "Intelligent task routing"
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [{
+          "type": "command",
+          "timeout": 5,
+          "command": "\"$HOME/.claude/monitoring/hooks/session-restore.sh\""
+        }],
+        "description": "Restore previous session context"
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "*",
@@ -18,8 +40,9 @@ Add to your `~/.claude/settings.json`:
           "type": "command",
           "async": true,
           "timeout": 5,
-          "command": "~/.claude/monitoring/hooks/security-audit.sh"
-        }]
+          "command": "\"$HOME/.claude/monitoring/hooks/security-audit.sh\""
+        }],
+        "description": "Security audit"
       }
     ],
     "PostToolUse": [
@@ -29,8 +52,21 @@ Add to your `~/.claude/settings.json`:
           "type": "command",
           "async": true,
           "timeout": 5,
-          "command": "~/.claude/monitoring/hooks/log-tool-use.sh"
-        }]
+          "command": "\"$HOME/.claude/monitoring/hooks/log-tool-use.sh\""
+        }],
+        "description": "Log tool executions"
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [{
+          "type": "command",
+          "async": true,
+          "timeout": 10,
+          "command": "\"$HOME/.claude/monitoring/hooks/pre-compact-checkpoint.sh\""
+        }],
+        "description": "Checkpoint before compaction"
       }
     ],
     "Stop": [
@@ -40,8 +76,19 @@ Add to your `~/.claude/settings.json`:
           "type": "command",
           "async": true,
           "timeout": 10,
-          "command": "~/.claude/monitoring/hooks/session-metrics.sh"
-        }]
+          "command": "\"$HOME/.claude/monitoring/hooks/session-metrics.sh\""
+        }],
+        "description": "Session metrics"
+      },
+      {
+        "matcher": "*",
+        "hooks": [{
+          "type": "command",
+          "async": true,
+          "timeout": 10,
+          "command": "\"$HOME/.claude/monitoring/hooks/session-persist.sh\""
+        }],
+        "description": "Auto-save session state"
       }
     ]
   }
@@ -57,6 +104,9 @@ tail -f ~/.claude/logs/tool-execution.jsonl | jq
 # Security audit log
 tail -f ~/.claude/logs/security-audit.jsonl | jq
 
+# Task routing decisions
+tail -f ~/.claude/logs/task-router.jsonl | jq
+
 # Session metrics
 cat ~/.claude/logs/session-metrics.jsonl | jq
 ```
@@ -65,9 +115,13 @@ cat ~/.claude/logs/session-metrics.jsonl | jq
 
 | Script | Event | Purpose |
 |--------|-------|---------|
-| `log-tool-use.sh` | PostToolUse | Log all tool executions |
+| `task-router.sh` | UserPromptSubmit | Route prompts to the right agent/workflow |
+| `session-restore.sh` | SessionStart | Restore previous session context |
 | `security-audit.sh` | PreToolUse | Detect suspicious operations |
+| `log-tool-use.sh` | PostToolUse | Log all tool executions |
+| `pre-compact-checkpoint.sh` | PreCompact | Checkpoint before context compaction |
 | `session-metrics.sh` | Stop | Capture session summary |
+| `session-persist.sh` | Stop | Auto-save session state |
 
 ## Log Formats
 
@@ -108,6 +162,59 @@ cat ~/.claude/logs/session-metrics.jsonl | jq
 }
 ```
 
+### task-router.jsonl
+
+```json
+{
+  "timestamp": "2026-04-05T10:15:30Z",
+  "session_id": "abc123",
+  "route": "debug",
+  "suggested_agent": "tdd-guide",
+  "confidence": "high",
+  "prompt_preview": "fix the login bug where users get a 500 error..."
+}
+```
+
+### Checkpoints (Pre-Compaction)
+
+Saved to `~/.claude/checkpoints/checkpoint-<session>-<timestamp>.json`:
+
+```json
+{
+  "timestamp": "2026-04-05T11:00:00Z",
+  "session_id": "abc123",
+  "event": "pre_compact_checkpoint",
+  "working_directory": "/Users/you/project",
+  "git": {
+    "branch": "feat/login-fix",
+    "modified_files": ["src/auth.ts", "tests/auth.test.ts"],
+    "staged_files": []
+  },
+  "messages_before_compact": 142
+}
+```
+
+### Session State (Auto-Persisted)
+
+Saved to `~/.claude/sessions/session-<id>.json`:
+
+```json
+{
+  "timestamp": "2026-04-05T11:30:00Z",
+  "session_id": "abc123",
+  "working_directory": "/Users/you/project",
+  "git": {
+    "branch": "feat/login-fix",
+    "modified_files": ["src/auth.ts"],
+    "staged_files": ["src/auth.ts"],
+    "recent_commits": ["a1b2c3d fix: resolve 500 on login"]
+  },
+  "activity": {
+    "tool_count": 47
+  }
+}
+```
+
 ## Alert Levels
 
 | Level | Examples | Action |
@@ -143,7 +250,7 @@ just start  # or ./scripts/start-system.sh
 ```bash
 # Most used tools today
 cat ~/.claude/logs/tool-execution.jsonl | \
-  jq -r 'select(.timestamp | startswith("2026-03-30")) | .tool' | \
+  jq -r 'select(.timestamp | startswith("2026-04-05")) | .tool' | \
   sort | uniq -c | sort -rn
 
 # Security alerts by level
@@ -153,6 +260,20 @@ cat ~/.claude/logs/security-audit.jsonl | \
 # Average tools per session
 cat ~/.claude/logs/session-metrics.jsonl | \
   jq -s 'if length > 0 then (map(.tool_count) | add / length) else 0 end'
+
+# Most common task routes
+cat ~/.claude/logs/task-router.jsonl | \
+  jq -r '.route' | sort | uniq -c | sort -rn
+
+# Agent suggestions by confidence
+cat ~/.claude/logs/task-router.jsonl | \
+  jq -r '[.suggested_agent, .confidence] | join(" ")' | sort | uniq -c | sort -rn
+
+# List saved checkpoints
+ls -lt ~/.claude/checkpoints/ | head -10
+
+# Recent sessions
+ls -lt ~/.claude/sessions/ | head -10
 ```
 
 ## Log Rotation
