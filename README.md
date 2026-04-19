@@ -68,7 +68,49 @@ Restart Claude Code. Try `/plan`, `/tdd`, `/verify`, or `/code-review`.
 
 Available components: `agents`, `commands`, `skills`, `rules`, `monitoring` (zero-dep lifecycle hooks), `mcp`, `sounds`, `security` (docs), `hooks` (opt-in, needs Node.js).
 
-**Update**: re-run the same one-liner — `setup.sh` pulls the latest commit before installing. Your `settings.json` and `mcp.json` are never overwritten; everything else is backed up to `~/.claude/backups/pre-install-<timestamp>/` before install.
+### Updating
+
+Re-run the one-liner at any time — `setup.sh` fetches the latest commit, hard-resets to `origin/main`, and re-runs `install.sh`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Cyvid7-Darus10/claude-code-config/main/setup.sh | bash
+```
+
+What happens to each file in `~/.claude/`:
+
+| Path | Behaviour on update |
+|------|---------------------|
+| `settings.json` | **Never overwritten** — your customisations are safe. Diff against the repo's `settings.json` to see new defaults worth merging. |
+| `mcp.json` | **Never overwritten** — protects your tokens. |
+| `agents/`, `commands/`, `skills/`, `rules/`, `monitoring/` | Replaced with latest. Previous copy backed up to `~/.claude/backups/pre-install-<timestamp>/` first. |
+| `~/.local/share/claude-code-config` (the clone) | Fast-forwarded to `origin/main`. |
+
+**See what changed** before updating:
+
+```bash
+cd ~/.local/share/claude-code-config && git fetch && git log --oneline HEAD..origin/main
+```
+
+**Pin to a specific version** (useful for reproducible team setups):
+
+```bash
+CLAUDE_CODE_CONFIG_REF=v1.0.0 curl -fsSL https://raw.githubusercontent.com/Cyvid7-Darus10/claude-code-config/main/setup.sh | bash
+```
+
+**Roll back** to a previous install:
+
+```bash
+ls ~/.claude/backups/                    # find the timestamp you want
+cp -r ~/.claude/backups/pre-install-<timestamp>/* ~/.claude/
+```
+
+**Merge new defaults into your existing `settings.json`** — since the installer won't overwrite it:
+
+```bash
+diff ~/.claude/settings.json ~/.local/share/claude-code-config/settings.json
+```
+
+Copy over the hook entries or permission rules you want; leave your custom fields alone.
 
 ### Requirements
 
