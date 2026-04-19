@@ -107,8 +107,10 @@ The default install is **zero runtime dependencies** — the 4 lifecycle hooks a
 ## Workflows
 
 - **Idea → plan → TDD → ship** — `/plan` uses the brainstorming skill, `/tdd` runs RED-GREEN-REFACTOR.
-- **Intelligent routing** — the `task-router` hook analyses every prompt; bug fixes, build errors, security tasks, and refactors get a one-line hint suggesting the right agent.
+- **Intelligent routing** — the `task-router` hook analyses every prompt and surfaces the right agent or skill as a hint. Routes include: `plan-first`, `architecture`, `debug`, `tdd`, `security`, `review`, `refactor`, `build-fix`, `docs`, `performance`, `backend` (endpoint/migration/queue work → backend-judgement checklist), `reasoning` (ambiguous/cross-cutting prompts → systematic-reasoning).
 - **Session continuity** — `session-restore` on start, `pre-compact-checkpoint` before compaction, `session-persist` on stop. Pick up where you left off across restarts.
+- **Deliberate thinking** — the `systematic-reasoning` skill forces a four-pass model-building process before non-trivial changes. The `backend-judgement` skill applies a 9-check production-safety list to every endpoint, migration, queue consumer, and job.
+- **Multi-repo consistency** — `rules/common/multi-repo-consistency.md` codifies cross-stack invariants (naming, error handling, logging, boundaries, testing) so Claude behaves the same across your Go / TS / Python / Rust / Java / Kotlin / Swift / C++ / PHP / C# / Perl repos.
 
 ---
 
@@ -239,8 +241,8 @@ claude-code-config/
 │   └── marketplace.json   # Plugin marketplace entry (Anthropic convention)
 ├── agents/                # 29 specialized subagents
 ├── commands/              # 60 slash commands
-├── skills/                # 60 workflow skills
-├── rules/                 # 65 coding rules (common + per-language)
+├── skills/                # 62 workflow skills
+├── rules/                 # 66 coding rules (common + per-language)
 ├── monitoring/hooks/      # 4 zero-dep lifecycle hooks (default)
 ├── hooks/                 # Opt-in Node quality-gate hooks
 ├── scripts/hooks/         # Scripts invoked by the opt-in hooks
