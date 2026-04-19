@@ -21,6 +21,22 @@ Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-
 
 ## Install
 
+**One-liner** (clones to `~/.local/share/claude-code-config`, installs the default zero-dep set):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Cyvid7-Darus10/claude-code-config/main/setup.sh | bash
+```
+
+Or pass flags through:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Cyvid7-Darus10/claude-code-config/main/setup.sh | bash -s -- --minimal
+curl -fsSL https://raw.githubusercontent.com/Cyvid7-Darus10/claude-code-config/main/setup.sh | bash -s -- --full
+curl -fsSL https://raw.githubusercontent.com/Cyvid7-Darus10/claude-code-config/main/setup.sh | bash -s -- --dry-run
+```
+
+**Manual clone** (if you'd rather inspect before running):
+
 ```bash
 git clone https://github.com/Cyvid7-Darus10/claude-code-config.git
 cd claude-code-config
@@ -52,7 +68,7 @@ Restart Claude Code. Try `/plan`, `/tdd`, `/verify`, or `/code-review`.
 
 Available components: `agents`, `commands`, `skills`, `rules`, `monitoring` (zero-dep lifecycle hooks), `mcp`, `sounds`, `security` (docs), `hooks` (opt-in, needs Node.js).
 
-**Update**: re-run `./install.sh` from a freshly pulled repo. Your `settings.json` and `mcp.json` are never overwritten; everything else is backed up to `~/.claude/backups/pre-install-<timestamp>/` before install.
+**Update**: re-run the same one-liner — `setup.sh` pulls the latest commit before installing. Your `settings.json` and `mcp.json` are never overwritten; everything else is backed up to `~/.claude/backups/pre-install-<timestamp>/` before install.
 
 ### Requirements
 
