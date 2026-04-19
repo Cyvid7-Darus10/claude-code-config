@@ -1,88 +1,63 @@
 #!/bin/bash
 # session-restore.sh - Restore session context on SessionStart
-# Loads the most recent session state to provide continuity across conversations
-# Inspired by ruflo's session persistence pattern (github.com/ruvnet/ruflo)
+# Zero-dependency: pure bash, no jq required.
+# Loads the most recent session state scoped to the current working directory.
 
-set -e
+set -u
 
-INPUT=$(cat)
+INPUT=$(cat 2>/dev/null || true)
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 SESSION_DIR="${HOME}/.claude/sessions"
 CHECKPOINT_DIR="${HOME}/.claude/checkpoints"
 LOG_DIR="${HOME}/.claude/logs"
 
-mkdir -p "$SESSION_DIR" "$LOG_DIR"
+mkdir -p "$SESSION_DIR" "$LOG_DIR" 2>/dev/null || true
 
-SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
+# Extract session_id from input without jq (best-effort).
+SESSION_ID=$(printf '%s' "$INPUT" | grep -oE '"session_id"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed -E 's/.*"([^"]*)"$/\1/')
+SESSION_ID="${SESSION_ID:-unknown}"
 CWD=$(pwd)
 
-# Find the most recent session file for this working directory
+# Find the most recent session file whose working_directory matches CWD.
 LATEST_SESSION=""
 if [ -d "$SESSION_DIR" ]; then
-  # Check sessions from newest to oldest, match on working directory
-  LATEST_SESSION=$(ls -t "$SESSION_DIR"/session-*.json 2>/dev/null | while read -r f; do
-    DIR=$(jq -r '.working_directory // ""' "$f" 2>/dev/null)
-    if [ "$DIR" = "$CWD" ]; then
-      echo "$f"
+  while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    if grep -qF "\"working_directory\":\"$CWD\"" "$f" 2>/dev/null; then
+      LATEST_SESSION="$f"
       break
     fi
-  done)
-
-  # No fallback to other projects — restoring unrelated context is worse than no context
+  done < <(ls -t "$SESSION_DIR"/session-*.json 2>/dev/null)
 fi
 
-# Find most recent checkpoint
+# Find most recent checkpoint.
 LATEST_CHECKPOINT=""
 if [ -d "$CHECKPOINT_DIR" ]; then
   LATEST_CHECKPOINT=$(ls -t "$CHECKPOINT_DIR"/checkpoint-*.json 2>/dev/null | head -1)
 fi
 
-# Build context summary
-CONTEXT_PARTS=()
+# Small extractor: first value of a flat string field from a JSON file.
+extract_field() {
+  local key="$1" file="$2"
+  grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" "$file" 2>/dev/null | head -1 | sed -E 's/.*"([^"]*)"$/\1/'
+}
 
+# Output context for the model to consume.
 if [ -n "$LATEST_SESSION" ] && [ -f "$LATEST_SESSION" ]; then
-  SESSION_TIMESTAMP=$(jq -r '.timestamp // "unknown"' "$LATEST_SESSION" 2>/dev/null)
-  SESSION_BRANCH=$(jq -r '.git.branch // "unknown"' "$LATEST_SESSION" 2>/dev/null)
-  SESSION_MODIFIED=$(jq -r '.git.modified_files // [] | join(", ")' "$LATEST_SESSION" 2>/dev/null)
-  SESSION_SUMMARY=$(jq -r '.summary // ""' "$LATEST_SESSION" 2>/dev/null)
-
-  CONTEXT_PARTS+=("[session-restore] Previous session: ${SESSION_TIMESTAMP}")
-  if [ -n "$SESSION_BRANCH" ] && [ "$SESSION_BRANCH" != "unknown" ] && [ "$SESSION_BRANCH" != "null" ]; then
-    CONTEXT_PARTS+=("  Branch: ${SESSION_BRANCH}")
-  fi
-  if [ -n "$SESSION_MODIFIED" ] && [ "$SESSION_MODIFIED" != "" ]; then
-    CONTEXT_PARTS+=("  Modified files: ${SESSION_MODIFIED}")
-  fi
-  if [ -n "$SESSION_SUMMARY" ] && [ "$SESSION_SUMMARY" != "" ] && [ "$SESSION_SUMMARY" != "null" ]; then
-    CONTEXT_PARTS+=("  Summary: ${SESSION_SUMMARY}")
-  fi
+  SESSION_TS=$(extract_field "timestamp" "$LATEST_SESSION")
+  SESSION_BRANCH=$(extract_field "branch" "$LATEST_SESSION")
+  echo "[session-restore] Previous session: ${SESSION_TS:-unknown}"
+  [ -n "$SESSION_BRANCH" ] && [ "$SESSION_BRANCH" != "none" ] && echo "  Branch: $SESSION_BRANCH"
 fi
 
 if [ -n "$LATEST_CHECKPOINT" ] && [ -f "$LATEST_CHECKPOINT" ]; then
-  CP_TIMESTAMP=$(jq -r '.timestamp // "unknown"' "$LATEST_CHECKPOINT" 2>/dev/null)
-  CP_MESSAGES=$(jq -r '.messages_before_compact // 0' "$LATEST_CHECKPOINT" 2>/dev/null)
-  CONTEXT_PARTS+=("[checkpoint] Last compaction: ${CP_TIMESTAMP} (${CP_MESSAGES} messages)")
+  CP_TS=$(extract_field "timestamp" "$LATEST_CHECKPOINT")
+  echo "[checkpoint] Last compaction: ${CP_TS:-unknown}"
 fi
 
-# Output context if we found anything useful
-if [ ${#CONTEXT_PARTS[@]} -gt 0 ]; then
-  printf '%s\n' "${CONTEXT_PARTS[@]}"
-fi
-
-# Log the restore event
-LOG_ENTRY=$(jq -nc \
-  --arg ts "$TIMESTAMP" \
-  --arg session "$SESSION_ID" \
-  --arg restored_from "${LATEST_SESSION:-none}" \
-  --arg checkpoint "${LATEST_CHECKPOINT:-none}" \
-  '{
-    timestamp: $ts,
-    session_id: $session,
-    event: "session_restore",
-    restored_from: $restored_from,
-    checkpoint: $checkpoint
-  }')
-
-echo "$LOG_ENTRY" >> "${LOG_DIR}/session-metrics.jsonl"
+# Append a minimal log line (one-line JSON).
+printf '{"timestamp":"%s","session_id":"%s","event":"session_restore","restored_from":"%s","checkpoint":"%s"}\n' \
+  "$TIMESTAMP" "$SESSION_ID" "${LATEST_SESSION:-none}" "${LATEST_CHECKPOINT:-none}" \
+  >> "${LOG_DIR}/session-metrics.jsonl" 2>/dev/null || true
 
 exit 0

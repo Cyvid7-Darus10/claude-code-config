@@ -1,11 +1,36 @@
 # OS
 .DS_Store
 Thumbs.db
+*.swp
+*~
 
-# Secrets - never commit real tokens
+# Secrets — never commit real tokens
 *.secret
 .env
+.env.*
+!.env.example
 
-# Runtime/cache
+# Runtime / cache
 node_modules/
+.npm/
+.pnpm-store/
+__pycache__/
+*.pyc
+.venv/
+
+# Build outputs
+dist/
+build/
+coverage/
+*.log
+
+# Editors
+.idea/
+.vscode/
+*.sublime-*
+
+# External projects that may be cloned next to this repo
 claude-mission-control/
+
+# Local overrides
+settings.local.json

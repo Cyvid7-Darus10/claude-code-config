@@ -29,58 +29,30 @@
     ]
   },
   "hooks": {
-    "UserPromptSubmit": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "timeout": 5,
-            "command": "\"$HOME/.claude/monitoring/hooks/task-router.sh\""
-          }
-        ],
-        "description": "Intelligent task routing - suggest the right agent/workflow based on prompt"
-      }
-    ],
     "SessionStart": [
       {
         "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "timeout": 5,
+            "timeout": 3,
             "command": "\"$HOME/.claude/monitoring/hooks/session-restore.sh\""
           }
         ],
         "description": "Restore previous session context for continuity"
       }
     ],
-    "PreToolUse": [
+    "UserPromptSubmit": [
       {
         "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "async": true,
-            "timeout": 5,
-            "command": "\"$HOME/.claude/monitoring/hooks/security-audit.sh\""
+            "timeout": 3,
+            "command": "\"$HOME/.claude/monitoring/hooks/task-router.sh\""
           }
         ],
-        "description": "Security audit - detect suspicious operations"
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "async": true,
-            "timeout": 5,
-            "command": "\"$HOME/.claude/monitoring/hooks/log-tool-use.sh\""
-          }
-        ],
-        "description": "Log all tool executions for observability"
+        "description": "Suggest the right agent/workflow based on prompt"
       }
     ],
     "PreCompact": [
@@ -99,48 +71,16 @@
     ],
     "Stop": [
       {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "afplay $HOME/.claude/sounds/jobs-done.mp3 &"
-          }
-        ],
-        "description": "Play completion sound"
-      },
-      {
         "matcher": "*",
         "hooks": [
           {
             "type": "command",
             "async": true,
-            "timeout": 10,
-            "command": "\"$HOME/.claude/monitoring/hooks/session-metrics.sh\""
-          }
-        ],
-        "description": "Capture session metrics"
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "async": true,
-            "timeout": 10,
+            "timeout": 5,
             "command": "\"$HOME/.claude/monitoring/hooks/session-persist.sh\""
           }
         ],
         "description": "Auto-save session state for cross-session continuity"
-      }
-    ],
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "afplay $HOME/.claude/sounds/work-work.mp3 &"
-          }
-        ],
-        "description": "Play notification sound"
       }
     ]
   },
