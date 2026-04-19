@@ -49,6 +49,12 @@ elif printf '%s' "$PROMPT_LOWER" | grep -qE '(write (the |a )?(docs|documentatio
   ROUTE="docs"; AGENT="doc-updater"; CONFIDENCE="medium"
 elif printf '%s' "$PROMPT_LOWER" | grep -qE '(optimize (this|the|for)|speed up|fix.*bottleneck|reduce.*latency|memory leak|profil(e|ing) (this|the))'; then
   ROUTE="performance"; AGENT="architect"; CONFIDENCE="medium"
+# Backend-specific work → invoke backend-judgement checklist.
+elif printf '%s' "$PROMPT_LOWER" | grep -qE '(add .* endpoint|new (api|route|handler)|migration|schema change|background job|queue consumer|webhook|rate limit|idempoten|transaction|race condition|sql|postgres|mysql)'; then
+  ROUTE="backend"; AGENT="backend-judgement"; CONFIDENCE="high"
+# Complex / ambiguous / cross-cutting → force systematic reasoning before coding.
+elif printf '%s' "$PROMPT_LOWER" | grep -qE '(why (is|does|would|can.?t)|i.?m not sure|maybe|probably|something.?s off|weird|confus(ing|ed)|strange behavi|intermittent|flaky|sometimes (fails|works)|only on (prod|staging))'; then
+  ROUTE="reasoning"; AGENT="systematic-reasoning"; CONFIDENCE="medium"
 fi
 
 # Route hint → injected as system context for the model.
@@ -64,6 +70,8 @@ if [ -n "$ROUTE" ] && [ "$CONFIDENCE" != "low" ]; then
     build-fix)    HINT="Build error — build-error-resolver makes minimal surgical fixes." ;;
     docs)         HINT="Docs task — doc-updater generates and updates codemaps." ;;
     performance)  HINT="Performance — profile first before optimising." ;;
+    backend)      HINT="Backend change — walk the backend-judgement checklist: idempotency, transactions, timeouts, observability, authz." ;;
+    reasoning)    HINT="Ambiguous or cross-cutting — invoke the systematic-reasoning skill. Build the model before proposing a change." ;;
     *)            HINT="" ;;
   esac
 

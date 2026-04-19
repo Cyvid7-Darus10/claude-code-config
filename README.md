@@ -7,11 +7,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agents](https://img.shields.io/badge/Agents-29-purple)](agents/)
 [![Commands](https://img.shields.io/badge/Commands-60-green)](commands/)
-[![Skills](https://img.shields.io/badge/Skills-60-orange)](skills/)
-[![Rules](https://img.shields.io/badge/Rules-65-red)](rules/)
+[![Skills](https://img.shields.io/badge/Skills-62-orange)](skills/)
+[![Rules](https://img.shields.io/badge/Rules-66-red)](rules/)
 [![Zero-Dep Hooks](https://img.shields.io/badge/Hooks-Zero--Dep-blueviolet)](monitoring/hooks/)
 
-29 agents · 60 commands · 60 skills · 65 rules · zero-dependency hooks · intelligent routing.
+29 agents · 60 commands · 62 skills · 66 rules · zero-dependency hooks · intelligent routing.
 
 Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-code) + [obra/superpowers](https://github.com/obra/superpowers).
 
@@ -91,8 +91,8 @@ The default install is **zero runtime dependencies** — the 4 lifecycle hooks a
 |-----------|------:|----------|
 | Agents | 29 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, language-specific reviewers |
 | Slash commands | 60 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/brainstorm`, `/save-session`, `/resume-session` |
-| Skills | 60 | brainstorming, writing-plans, executing-plans, TDD, systematic-debugging, strategic-compact |
-| Coding rules | 65 | Common + TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl |
+| Skills | 62 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, strategic-compact |
+| Coding rules | 66 | Common + TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl + **multi-repo-consistency** |
 | Lifecycle hooks | 4 | SessionStart restore · UserPromptSubmit router · PreCompact checkpoint · Stop persist — pure bash |
 | MCP servers | 4 | `context7` (docs), `playwright`, `magic` (UI), `github` (token + Docker required) |
 
@@ -200,6 +200,25 @@ Edit `~/.claude/settings.json` under `hooks.{SessionStart,UserPromptSubmit,PreTo
 The default config avoids `PreToolUse` and `PostToolUse` because they fire on **every** tool call and can add several seconds of latency per turn. If you add them, keep them small, set `timeout` low, and prefer `async: true`.
 
 </details>
+
+---
+
+## Recommended companion plugins
+
+After installing this config, layer these official marketplaces on top — they're curated, actively maintained, and complement our agents without duplicating them:
+
+```bash
+# In Claude Code:
+/plugin install superpowers@claude-plugins-official
+/plugin marketplace add trailofbits/skills
+/plugin marketplace add wshobson/agents
+```
+
+| Plugin | Why add it | Source |
+|--------|------------|--------|
+| **superpowers** | TDD methodology, brainstorming, systematic-debugging — officially accepted into Anthropic marketplace Jan 2026 | [obra/superpowers](https://github.com/obra/superpowers) |
+| **Trail of Bits skills** | Pro-grade security auditing: static analysis, variant analysis, differential review, supply-chain risk, constant-time analysis | [trailofbits/skills](https://github.com/trailofbits/skills) |
+| **wshobson/agents** | 184 agents across 25 categories — cherry-pick `conductor` (track management), `comprehensive-review` (multi-perspective analysis), `plugin-eval` (anti-pattern detection) | [wshobson/agents](https://github.com/wshobson/agents) |
 
 ---
 
