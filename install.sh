@@ -19,10 +19,10 @@ usage() {
 Usage: ./install.sh [OPTIONS] [COMPONENTS...]
 
 Components (default: agents, commands, skills, rules, monitoring, mcp):
-  agents       29 specialized subagents
-  commands     60 slash commands
-  skills       60 workflow skills
-  rules        65 coding rules
+  agents       30 specialized subagents
+  commands     63 slash commands
+  skills       64 workflow skills
+  rules        66 coding rules
   monitoring   4 zero-dep lifecycle hooks (pure bash)
   mcp          MCP server configs (edit mcp.json for your tokens)
   sounds       Optional macOS notification sounds

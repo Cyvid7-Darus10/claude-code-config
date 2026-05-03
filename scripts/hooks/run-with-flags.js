@@ -37,6 +37,34 @@ function getPluginRoot() {
   return path.resolve(__dirname, '..', '..');
 }
 
+function writeStderr(stderr) {
+  if (typeof stderr !== 'string' || stderr.length === 0) return;
+  process.stderr.write(stderr.endsWith('\n') ? stderr : `${stderr}\n`);
+}
+
+// Hooks may return a string (legacy: write directly) or
+// { stdout, stderr, exitCode } (structured: route each field).
+// Returns the exit code to use.
+function emitHookResult(raw, output) {
+  if (typeof output === 'string' || Buffer.isBuffer(output)) {
+    process.stdout.write(String(output));
+    return 0;
+  }
+
+  if (output && typeof output === 'object') {
+    writeStderr(output.stderr);
+    if (Object.prototype.hasOwnProperty.call(output, 'stdout')) {
+      process.stdout.write(String(output.stdout ?? ''));
+    } else if (!Number.isInteger(output.exitCode) || output.exitCode === 0) {
+      process.stdout.write(raw);
+    }
+    return Number.isInteger(output.exitCode) ? output.exitCode : 0;
+  }
+
+  process.stdout.write(raw);
+  return 0;
+}
+
 async function main() {
   const [, , hookId, relScriptPath, profilesCsv] = process.argv;
   const raw = await readStdinRaw();
@@ -90,12 +118,13 @@ async function main() {
   if (hookModule && typeof hookModule.run === 'function') {
     try {
       const output = hookModule.run(raw);
-      if (output !== null && output !== undefined) process.stdout.write(output);
+      const exitCode = emitHookResult(raw, output);
+      process.exit(exitCode);
     } catch (runErr) {
       process.stderr.write(`[Hook] run() error for ${hookId}: ${runErr.message}\n`);
       process.stdout.write(raw);
+      process.exit(0);
     }
-    process.exit(0);
   }
 
   // Legacy path: spawn a child Node process for hooks without run() export

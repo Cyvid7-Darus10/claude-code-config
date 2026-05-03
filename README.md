@@ -5,13 +5,13 @@
 **Production-ready Claude Code configuration for rapid app development.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Agents](https://img.shields.io/badge/Agents-29-purple)](agents/)
-[![Commands](https://img.shields.io/badge/Commands-60-green)](commands/)
-[![Skills](https://img.shields.io/badge/Skills-62-orange)](skills/)
+[![Agents](https://img.shields.io/badge/Agents-30-purple)](agents/)
+[![Commands](https://img.shields.io/badge/Commands-63-green)](commands/)
+[![Skills](https://img.shields.io/badge/Skills-64-orange)](skills/)
 [![Rules](https://img.shields.io/badge/Rules-66-red)](rules/)
 [![Zero-Dep Hooks](https://img.shields.io/badge/Hooks-Zero--Dep-blueviolet)](monitoring/hooks/)
 
-29 agents · 60 commands · 62 skills · 66 rules · zero-dependency hooks · intelligent routing.
+30 agents · 63 commands · 64 skills · 66 rules · zero-dependency hooks · intelligent routing.
 
 Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-code) + [obra/superpowers](https://github.com/obra/superpowers).
 
@@ -131,9 +131,9 @@ The default install is **zero runtime dependencies** — the 4 lifecycle hooks a
 
 | Component | Count | Examples |
 |-----------|------:|----------|
-| Agents | 29 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, language-specific reviewers |
-| Slash commands | 60 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/brainstorm`, `/save-session`, `/resume-session` |
-| Skills | 62 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, strategic-compact |
+| Agents | 30 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, `dart-build-resolver`, language-specific reviewers |
+| Slash commands | 63 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/brainstorm`, `/save-session`, `/resume-session`, `/flutter-build`, `/flutter-review`, `/flutter-test` |
+| Skills | 64 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, **gateguard**, **search-first**, strategic-compact |
 | Coding rules | 66 | Common + TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl + **multi-repo-consistency** |
 | Lifecycle hooks | 4 | SessionStart restore · UserPromptSubmit router · PreCompact checkpoint · Stop persist — pure bash |
 | MCP servers | 4 | `context7` (docs), `playwright`, `magic` (UI), `github` (token + Docker required) |
@@ -142,7 +142,7 @@ The default install is **zero runtime dependencies** — the 4 lifecycle hooks a
 
 | Component | Count | Examples |
 |-----------|------:|----------|
-| Quality hooks | 28 | Formatters, linters, type-checks, git-push reminders, PR logger, build analysis |
+| Quality hooks | 29 | Formatters, linters, type-checks, git-push reminders, PR logger, build analysis, **gateguard fact-forcing gate** (opt-in via `strict` profile) |
 
 ---
 
@@ -281,9 +281,9 @@ After installing this config, layer these official marketplaces on top — they'
 claude-code-config/
 ├── .claude-plugin/
 │   └── marketplace.json   # Plugin marketplace entry (Anthropic convention)
-├── agents/                # 29 specialized subagents
-├── commands/              # 60 slash commands
-├── skills/                # 62 workflow skills
+├── agents/                # 30 specialized subagents
+├── commands/              # 63 slash commands
+├── skills/                # 64 workflow skills
 ├── rules/                 # 66 coding rules (common + per-language)
 ├── monitoring/hooks/      # 4 zero-dep lifecycle hooks (default)
 ├── hooks/                 # Opt-in Node quality-gate hooks

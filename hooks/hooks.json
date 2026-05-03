@@ -108,6 +108,26 @@
         "description": "Block modifications to linter/formatter config files. Steers agent to fix code instead of weakening configs."
       },
       {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:edit-write:gateguard-fact-force\" \"scripts/hooks/gateguard-fact-force.js\" \"strict\""
+          }
+        ],
+        "description": "GateGuard fact-forcing gate: blocks first edit/write per file and demands importers, public API, and schema facts. Disable with ECC_GATEGUARD=off."
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"pre:bash:gateguard-fact-force\" \"scripts/hooks/gateguard-fact-force.js\" \"strict\""
+          }
+        ],
+        "description": "GateGuard fact-forcing gate: blocks destructive bash and gates routine bash once per session. Disable with ECC_GATEGUARD=off."
+      },
+      {
         "matcher": "*",
         "hooks": [
           {
