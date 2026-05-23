@@ -25,6 +25,7 @@ process.stdin.on("data", (chunk) => {
 });
 
 process.stdin.on("end", () => {
+  let blocking = false;
   try {
     const input = JSON.parse(data);
     const filePath = input.tool_input?.file_path;
@@ -79,6 +80,7 @@ process.stdin.on("end", () => {
             .slice(0, 10);
 
           if (relevantLines.length > 0) {
+            blocking = true;
             console.error(
               "[Hook] TypeScript errors in " + path.basename(filePath) + ":",
             );
@@ -92,5 +94,8 @@ process.stdin.on("end", () => {
   }
 
   process.stdout.write(data);
-  process.exit(0);
+  // Exit 2 when the edited file has type errors so run-with-flags propagates a
+  // blocking status; paired with "continueOnBlock": true in hooks.json this feeds
+  // the errors back to Claude without ending the turn.
+  process.exit(blocking ? 2 : 0);
 });

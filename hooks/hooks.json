@@ -212,10 +212,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:edit:typecheck\" \"scripts/hooks/post-edit-typecheck.js\" \"strict\""
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/run-with-flags.js\" \"post:edit:typecheck\" \"scripts/hooks/post-edit-typecheck.js\" \"strict\"",
+            "continueOnBlock": true
           }
         ],
-        "description": "TypeScript check after editing .ts/.tsx files"
+        "description": "TypeScript check after editing .ts/.tsx files; on type errors in the edited file the hook exits 2 so the errors are fed back to Claude (continueOnBlock keeps the turn going to fix them)"
       },
       {
         "matcher": "Edit",
