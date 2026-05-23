@@ -1,7 +1,7 @@
 {
   "name": "claude-code-config",
   "version": "1.0.0",
-  "description": "Production-ready Claude Code configuration — 29 agents, 60 commands, 60 skills, 65 rules. Built on everything-claude-code + obra/superpowers.",
+  "description": "Production-ready Claude Code configuration — 33 agents, 67 commands, 66 skills, 66 rules. Built on Everything Claude Code (ECC) + obra/superpowers.",
   "author": {
     "name": "Cyrus David Pastelero",
     "url": "https://github.com/Cyvid7-Darus10"

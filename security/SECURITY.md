@@ -1,6 +1,6 @@
 # 7-Layer Security Framework
 
-Production-grade security for Claude Code agents. Based on the [Security Guide](https://github.com/affaan-m/everything-claude-code/blob/main/the-security-guide.md) and OWASP Agentic Top 10.
+Production-grade security for Claude Code agents. Based on the [Security Guide](https://github.com/affaan-m/ECC/blob/main/the-security-guide.md) and OWASP Agentic Top 10.
 
 ## Quick Scan
 

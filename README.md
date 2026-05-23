@@ -5,15 +5,15 @@
 **Production-ready Claude Code configuration for rapid app development.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Agents](https://img.shields.io/badge/Agents-30-purple)](agents/)
-[![Commands](https://img.shields.io/badge/Commands-63-green)](commands/)
-[![Skills](https://img.shields.io/badge/Skills-64-orange)](skills/)
+[![Agents](https://img.shields.io/badge/Agents-33-purple)](agents/)
+[![Commands](https://img.shields.io/badge/Commands-67-green)](commands/)
+[![Skills](https://img.shields.io/badge/Skills-66-orange)](skills/)
 [![Rules](https://img.shields.io/badge/Rules-66-red)](rules/)
 [![Zero-Dep Hooks](https://img.shields.io/badge/Hooks-Zero--Dep-blueviolet)](monitoring/hooks/)
 
-30 agents · 63 commands · 64 skills · 66 rules · zero-dependency hooks · intelligent routing.
+33 agents · 67 commands · 66 skills · 66 rules · zero-dependency hooks · intelligent routing.
 
-Built on [everything-claude-code](https://github.com/affaan-m/everything-claude-code) + [obra/superpowers](https://github.com/obra/superpowers).
+Built on [Everything Claude Code (ECC)](https://github.com/affaan-m/ECC) + [obra/superpowers](https://github.com/obra/superpowers).
 
 </div>
 
@@ -131,9 +131,9 @@ The default install is **zero runtime dependencies** — the 4 lifecycle hooks a
 
 | Component | Count | Examples |
 |-----------|------:|----------|
-| Agents | 30 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, `dart-build-resolver`, language-specific reviewers |
-| Slash commands | 63 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/brainstorm`, `/save-session`, `/resume-session`, `/flutter-build`, `/flutter-review`, `/flutter-test` |
-| Skills | 64 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, **gateguard**, **search-first**, strategic-compact |
+| Agents | 33 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, **`django-reviewer`**, **`fastapi-reviewer`**, language-specific reviewers |
+| Slash commands | 67 | `/plan`, `/tdd`, `/verify`, `/code-review`, **`/pr`**, **`/plan-prd`**, `/save-session`, `/resume-session`, `/flutter-build`, `/flutter-review` |
+| Skills | 66 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, **gateguard**, **search-first**, **fastapi-patterns**, **django-celery** |
 | Coding rules | 66 | Common + TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl + **multi-repo-consistency** |
 | Lifecycle hooks | 4 | SessionStart restore · UserPromptSubmit router · PreCompact checkpoint · Stop persist — pure bash |
 | MCP servers | 4 | `context7` (docs), `playwright`, `magic` (UI), `github` (token + Docker required) |
@@ -304,7 +304,7 @@ claude-code-config/
 
 ## Credits
 
-- [everything-claude-code](https://github.com/affaan-m/everything-claude-code) — Agents, commands, rules, hooks, scripts, security guide.
+- [Everything Claude Code (ECC)](https://github.com/affaan-m/ECC) — Agents, commands, rules, hooks, scripts, security guide.
 - [superpowers](https://github.com/obra/superpowers) — Brainstorming, planning, TDD skills.
 - [claude-code-hooks-multi-agent-observability](https://github.com/disler/claude-code-hooks-multi-agent-observability) — Monitoring patterns.
 - [ruflo](https://github.com/ruvnet/ruflo) — Task-router and session-persistence patterns.
