@@ -256,6 +256,7 @@ After installing this config, layer these official marketplaces on top — they'
 /plugin install superpowers@claude-plugins-official
 /plugin marketplace add trailofbits/skills
 /plugin marketplace add wshobson/agents
+/plugin marketplace add DietrichGebert/ponytail && /plugin install ponytail@ponytail
 ```
 
 | Plugin | Why add it | Source |
@@ -263,6 +264,7 @@ After installing this config, layer these official marketplaces on top — they'
 | **superpowers** | TDD methodology, brainstorming, systematic-debugging — officially accepted into Anthropic marketplace Jan 2026 | [obra/superpowers](https://github.com/obra/superpowers) |
 | **Trail of Bits skills** | Pro-grade security auditing: static analysis, variant analysis, differential review, supply-chain risk, constant-time analysis | [trailofbits/skills](https://github.com/trailofbits/skills) |
 | **wshobson/agents** | 184 agents across 25 categories — cherry-pick `conductor` (track management), `comprehensive-review` (multi-perspective analysis), `plugin-eval` (anti-pattern detection) | [wshobson/agents](https://github.com/wshobson/agents) |
+| **ponytail** | "Lazy senior dev mode" — enforces YAGNI, stdlib/native-first, shortest-diff solutions while keeping validation/security/a11y guards. Adds `/ponytail`, `/ponytail-review`, `/ponytail-audit`. Run `/ponytail full` after install. | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) |
 
 ---
 
