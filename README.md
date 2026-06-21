@@ -6,12 +6,12 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agents](https://img.shields.io/badge/Agents-33-purple)](agents/)
-[![Commands](https://img.shields.io/badge/Commands-67-green)](commands/)
-[![Skills](https://img.shields.io/badge/Skills-66-orange)](skills/)
+[![Commands](https://img.shields.io/badge/Commands-73-green)](commands/)
+[![Skills](https://img.shields.io/badge/Skills-67-orange)](skills/)
 [![Rules](https://img.shields.io/badge/Rules-66-red)](rules/)
 [![Zero-Dep Hooks](https://img.shields.io/badge/Hooks-Zero--Dep-blueviolet)](monitoring/hooks/)
 
-33 agents · 67 commands · 66 skills · 66 rules · zero-dependency hooks · intelligent routing.
+33 agents · 73 commands · 67 skills · 66 rules · zero-dependency hooks · intelligent routing.
 
 Built on [Everything Claude Code (ECC)](https://github.com/affaan-m/ECC) + [obra/superpowers](https://github.com/obra/superpowers).
 
@@ -132,8 +132,8 @@ The default install is **zero runtime dependencies** — the 4 lifecycle hooks a
 | Component | Count | Examples |
 |-----------|------:|----------|
 | Agents | 33 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, **`django-reviewer`**, **`fastapi-reviewer`**, language-specific reviewers |
-| Slash commands | 67 | `/plan`, `/tdd`, `/verify`, `/code-review`, **`/pr`**, **`/plan-prd`**, `/save-session`, `/resume-session`, `/flutter-build`, `/flutter-review` |
-| Skills | 66 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, **gateguard**, **search-first**, **fastapi-patterns**, **django-celery** |
+| Slash commands | 73 | `/plan`, `/tdd`, `/verify`, `/code-review`, **`/pr`**, **`/plan-prd`**, `/save-session`, `/resume-session`, `/flutter-build`, `/flutter-review`, **`/ponytail`**, **`/ponytail-review`**, **`/ponytail-audit`** |
+| Skills | 67 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, **gateguard**, **search-first**, **fastapi-patterns**, **django-celery**, **ponytail** (lazy-senior-dev mode) |
 | Coding rules | 66 | Common + TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl + **multi-repo-consistency** |
 | Lifecycle hooks | 4 | SessionStart restore · UserPromptSubmit router · PreCompact checkpoint · Stop persist — pure bash |
 | MCP servers | 4 | `context7` (docs), `playwright`, `magic` (UI), `github` (token + Docker required) |
@@ -256,7 +256,6 @@ After installing this config, layer these official marketplaces on top — they'
 /plugin install superpowers@claude-plugins-official
 /plugin marketplace add trailofbits/skills
 /plugin marketplace add wshobson/agents
-/plugin marketplace add DietrichGebert/ponytail && /plugin install ponytail@ponytail
 ```
 
 | Plugin | Why add it | Source |
@@ -264,7 +263,8 @@ After installing this config, layer these official marketplaces on top — they'
 | **superpowers** | TDD methodology, brainstorming, systematic-debugging — officially accepted into Anthropic marketplace Jan 2026 | [obra/superpowers](https://github.com/obra/superpowers) |
 | **Trail of Bits skills** | Pro-grade security auditing: static analysis, variant analysis, differential review, supply-chain risk, constant-time analysis | [trailofbits/skills](https://github.com/trailofbits/skills) |
 | **wshobson/agents** | 184 agents across 25 categories — cherry-pick `conductor` (track management), `comprehensive-review` (multi-perspective analysis), `plugin-eval` (anti-pattern detection) | [wshobson/agents](https://github.com/wshobson/agents) |
-| **ponytail** | "Lazy senior dev mode" — enforces YAGNI, stdlib/native-first, shortest-diff solutions while keeping validation/security/a11y guards. Adds `/ponytail`, `/ponytail-review`, `/ponytail-audit`. Run `/ponytail full` after install. | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) |
+
+> **ponytail** (lazy-senior-dev mode) is now **bundled** into this config under `skills/ponytail/` + `commands/ponytail*.md`, so `./install.sh` brings it in — no separate plugin needed. Run `/ponytail full` to activate, `/ponytail-help` for the command list. Ported from [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) (MIT).
 
 ---
 
@@ -310,6 +310,7 @@ claude-code-config/
 - [superpowers](https://github.com/obra/superpowers) — Brainstorming, planning, TDD skills.
 - [claude-code-hooks-multi-agent-observability](https://github.com/disler/claude-code-hooks-multi-agent-observability) — Monitoring patterns.
 - [ruflo](https://github.com/ruvnet/ruflo) — Task-router and session-persistence patterns.
+- [ponytail](https://github.com/DietrichGebert/ponytail) — Lazy-senior-dev skill + commands (MIT), ported into `skills/` and `commands/`.
 
 ## License
 
