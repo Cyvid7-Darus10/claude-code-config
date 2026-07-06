@@ -1,7 +1,7 @@
 {
   "name": "claude-code-config",
   "version": "2.0.0",
-  "description": "Lean, curated Claude Code configuration — 12 agents, 10 commands, 17 skills, curated rules. Trimmed from Everything Claude Code (ECC) to stay within context-budget best practices.",
+  "description": "Lean, curated Claude Code configuration — 12 agents, 16 commands, 18 skills, curated rules. Trimmed from Everything Claude Code (ECC) to stay within context-budget best practices.",
   "author": {
     "name": "Cyrus David Pastelero",
     "url": "https://github.com/Cyvid7-Darus10"

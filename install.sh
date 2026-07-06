@@ -20,8 +20,8 @@ Usage: ./install.sh [OPTIONS] [COMPONENTS...]
 
 Components (default: agents, commands, skills, rules, mcp):
   agents       12 specialized subagents
-  commands     10 slash commands
-  skills       17 workflow skills
+  commands     16 slash commands
+  skills       18 workflow skills
   rules        curated coding rules (common + python/swift/typescript)
   mcp          MCP server configs (context7, playwright)
   sounds       Optional macOS notification sounds
