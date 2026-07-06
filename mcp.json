@@ -1,19 +1,5 @@
 {
   "mcpServers": {
-    "github": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "GITHUB_PERSONAL_ACCESS_TOKEN",
-        "ghcr.io/github/github-mcp-server"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_GITHUB_TOKEN>"
-      }
-    },
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
@@ -21,16 +7,11 @@
     "playwright": {
       "command": "npx",
       "args": ["-y", "@playwright/mcp", "--browser", "chrome"]
-    },
-    "magic": {
-      "command": "npx",
-      "args": ["-y", "@magicuidesign/mcp@latest"]
     }
   },
   "_comments": {
-    "github": "Replace <YOUR_GITHUB_TOKEN> or run: gh auth token. Requires Docker.",
-    "context7": "Live documentation lookup for any library. Zero config.",
-    "playwright": "Browser automation and testing. Zero config.",
-    "magic": "Magic UI components for React. Zero config."
+    "context7": "Live documentation lookup for any library (used by docs-lookup agent). Zero config.",
+    "playwright": "Browser automation and testing (used by e2e-runner agent). Zero config.",
+    "github": "Removed — use the gh CLI instead; it is more context-efficient than a GitHub MCP server."
   }
 }

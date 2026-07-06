@@ -29,58 +29,28 @@
     ]
   },
   "hooks": {
-    "SessionStart": [
+    "PreToolUse": [
       {
-        "matcher": "*",
+        "matcher": "Read",
         "hooks": [
           {
             "type": "command",
-            "timeout": 3,
-            "command": "\"$HOME/.claude/monitoring/hooks/session-restore.sh\""
+            "command": "node \"$HOME/.claude/hooks/pre-read.mjs\""
           }
         ],
-        "description": "Restore previous session context for continuity"
+        "description": "Block duplicate file reads to save context tokens"
       }
     ],
-    "UserPromptSubmit": [
+    "PostToolUse": [
       {
-        "matcher": "*",
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "timeout": 3,
-            "command": "\"$HOME/.claude/monitoring/hooks/task-router.sh\""
+            "command": "node \"$HOME/.claude/hooks/compress.mjs\""
           }
         ],
-        "description": "Suggest the right agent/workflow based on prompt"
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "async": true,
-            "timeout": 10,
-            "command": "\"$HOME/.claude/monitoring/hooks/pre-compact-checkpoint.sh\""
-          }
-        ],
-        "description": "Save working state checkpoint before context compaction"
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "async": true,
-            "timeout": 5,
-            "command": "\"$HOME/.claude/monitoring/hooks/session-persist.sh\""
-          }
-        ],
-        "description": "Auto-save session state for cross-session continuity"
+        "description": "Compress noisy tool output before it bloats context"
       }
     ]
   },

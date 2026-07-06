@@ -18,15 +18,14 @@ usage() {
   cat <<EOF
 Usage: ./install.sh [OPTIONS] [COMPONENTS...]
 
-Components (default: agents, commands, skills, rules, monitoring, mcp):
-  agents       30 specialized subagents
-  commands     63 slash commands
-  skills       64 workflow skills
-  rules        66 coding rules
-  monitoring   4 zero-dep lifecycle hooks (pure bash)
-  mcp          MCP server configs (edit mcp.json for your tokens)
+Components (default: agents, commands, skills, rules, mcp):
+  agents       12 specialized subagents
+  commands     10 slash commands
+  skills       17 workflow skills
+  rules        curated coding rules (common + python/swift/typescript)
+  mcp          MCP server configs (context7, playwright)
   sounds       Optional macOS notification sounds
-  hooks        Node.js quality-gate hooks (requires Node.js + npm) -- OPT-IN
+  hooks        Node.js token-saving hooks (requires Node.js) -- OPT-IN
   security     Security framework documentation -- OPT-IN
 
 Options:
@@ -69,9 +68,9 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Default: zero runtime dependencies. Node-based 'hooks/' is opt-in.
-DEFAULT_COMPONENTS=(agents commands skills rules monitoring mcp)
+DEFAULT_COMPONENTS=(agents commands skills rules mcp)
 MINIMAL_COMPONENTS=(agents commands skills rules)
-FULL_COMPONENTS=(agents commands skills rules monitoring mcp sounds hooks)
+FULL_COMPONENTS=(agents commands skills rules mcp sounds hooks)
 # Used by --uninstall with no args: every component the installer can touch.
 ALL_COMPONENTS=(agents commands skills rules monitoring mcp sounds hooks security)
 

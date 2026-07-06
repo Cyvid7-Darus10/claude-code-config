@@ -5,13 +5,15 @@
 **Production-ready Claude Code configuration for rapid app development.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Agents](https://img.shields.io/badge/Agents-33-purple)](agents/)
-[![Commands](https://img.shields.io/badge/Commands-73-green)](commands/)
-[![Skills](https://img.shields.io/badge/Skills-67-orange)](skills/)
-[![Rules](https://img.shields.io/badge/Rules-66-red)](rules/)
-[![Zero-Dep Hooks](https://img.shields.io/badge/Hooks-Zero--Dep-blueviolet)](monitoring/hooks/)
+[![Agents](https://img.shields.io/badge/Agents-12-purple)](agents/)
+[![Commands](https://img.shields.io/badge/Commands-16-green)](commands/)
+[![Skills](https://img.shields.io/badge/Skills-18-orange)](skills/)
+[![Rules](https://img.shields.io/badge/Rules-curated-red)](rules/)
+[![Token-Saving Hooks](https://img.shields.io/badge/Hooks-Token--Saving-blueviolet)](hooks/)
 
-33 agents · 73 commands · 67 skills · 66 rules · zero-dependency hooks · intelligent routing.
+12 agents · 16 commands · 18 skills · curated rules · token-saving hooks.
+
+Deliberately lean: skill descriptions, agent definitions, and MCP schemas all consume context in **every** session. This config stays well under the ~10% startup-overhead budget so auto-invocation keeps working and subagents don't blow their context at spawn.
 
 Built on [Everything Claude Code (ECC)](https://github.com/affaan-m/ECC) + [obra/superpowers](https://github.com/obra/superpowers).
 
@@ -66,7 +68,7 @@ Restart Claude Code. Try `/plan`, `/tdd`, `/verify`, or `/code-review`.
 ./install.sh --uninstall skills         # Remove just one component
 ```
 
-Available components: `agents`, `commands`, `skills`, `rules`, `monitoring` (zero-dep lifecycle hooks), `mcp`, `sounds`, `security` (docs), `hooks` (opt-in, needs Node.js).
+Available components: `agents`, `commands`, `skills`, `rules`, `mcp`, `sounds`, `security` (docs), `hooks` (token-saving Node hooks, opt-in).
 
 ### Updating
 
@@ -82,7 +84,7 @@ What happens to each file in `~/.claude/`:
 |------|---------------------|
 | `settings.json` | **Never overwritten** — your customisations are safe. Diff against the repo's `settings.json` to see new defaults worth merging. |
 | `mcp.json` | **Never overwritten** — protects your tokens. |
-| `agents/`, `commands/`, `skills/`, `rules/`, `monitoring/` | Replaced with latest. Previous copy backed up to `~/.claude/backups/pre-install-<timestamp>/` first. |
+| `agents/`, `commands/`, `skills/`, `rules/` | Replaced with latest. Previous copy backed up to `~/.claude/backups/pre-install-<timestamp>/` first. |
 | `~/.local/share/claude-code-config` (the clone) | Fast-forwarded to `origin/main`. |
 
 **See what changed** before updating:
@@ -121,7 +123,7 @@ Copy over the hook entries or permission rules you want; leave your custom field
 | Node.js 18+ | Not needed | Required (for `hooks/` quality gates) |
 | jq / Python | Never | Never |
 
-The default install is **zero runtime dependencies** — the 4 lifecycle hooks are pure bash. The Node-based quality gates in `hooks/` are opt-in.
+The default install is **zero runtime dependencies**. The Node-based token-saving hooks in `hooks/` (duplicate-read blocking, output compression) are opt-in.
 
 ---
 
@@ -131,18 +133,17 @@ The default install is **zero runtime dependencies** — the 4 lifecycle hooks a
 
 | Component | Count | Examples |
 |-----------|------:|----------|
-| Agents | 33 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, **`django-reviewer`**, **`fastapi-reviewer`**, language-specific reviewers |
-| Slash commands | 73 | `/plan`, `/tdd`, `/verify`, `/code-review`, **`/pr`**, **`/plan-prd`**, `/save-session`, `/resume-session`, `/flutter-build`, `/flutter-review`, **`/ponytail`**, **`/ponytail-review`**, **`/ponytail-audit`** |
-| Skills | 67 | brainstorming, writing-plans, TDD, systematic-debugging, **systematic-reasoning**, **backend-judgement**, **gateguard**, **search-first**, **fastapi-patterns**, **django-celery**, **ponytail** (lazy-senior-dev mode) |
-| Coding rules | 66 | Common + TypeScript, Python, Go, Rust, Kotlin, Java, C++, Swift, PHP, C#, Perl + **multi-repo-consistency** |
-| Lifecycle hooks | 4 | SessionStart restore · UserPromptSubmit router · PreCompact checkpoint · Stop persist — pure bash |
-| MCP servers | 4 | `context7` (docs), `playwright`, `magic` (UI), `github` (token + Docker required) |
+| Agents | 12 | `planner`, `architect`, `code-reviewer`, `security-reviewer`, `tdd-guide`, `build-error-resolver`, `typescript-reviewer`, `python-reviewer`, `database-reviewer`, `docs-lookup`, `e2e-runner`, `refactor-cleaner` |
+| Slash commands | 16 | `/plan`, `/tdd`, `/verify`, `/code-review`, `/build-fix`, `/e2e`, `/test-coverage`, `/refactor-clean`, `/python-review`, `/docs`, `/ponytail` + 5 ponytail subcommands |
+| Skills | 18 | api-design, backend/frontend-patterns, postgres-patterns, database-migrations, security-review, e2e-testing, market-research, ponytail, python + swift/SwiftUI/Foundation Models packs |
+| Coding rules | curated | Common (coding style, git workflow, testing, security, multi-repo-consistency) + TypeScript, Python, Swift |
+| MCP servers | 2 | `context7` (docs, used by `docs-lookup`), `playwright` (used by `e2e-runner`) — GitHub via `gh` CLI, not MCP |
 
 **Opt-in with `--full`** (requires Node.js 18+):
 
 | Component | Count | Examples |
 |-----------|------:|----------|
-| Quality hooks | 29 | Formatters, linters, type-checks, git-push reminders, PR logger, build analysis, **gateguard fact-forcing gate** (opt-in via `strict` profile) |
+| Token-saving hooks | 2 | `pre-read.mjs` blocks duplicate file reads · `compress.mjs` compresses noisy tool output and detects command loops |
 
 ---
 
@@ -264,16 +265,14 @@ After installing this config, layer these official marketplaces on top — they'
 | **Trail of Bits skills** | Pro-grade security auditing: static analysis, variant analysis, differential review, supply-chain risk, constant-time analysis | [trailofbits/skills](https://github.com/trailofbits/skills) |
 | **wshobson/agents** | 184 agents across 25 categories — cherry-pick `conductor` (track management), `comprehensive-review` (multi-perspective analysis), `plugin-eval` (anti-pattern detection) | [wshobson/agents](https://github.com/wshobson/agents) |
 
-> **ponytail** (lazy-senior-dev mode) is now **bundled** into this config under `skills/ponytail/` + `commands/ponytail*.md`, so `./install.sh` brings it in — no separate plugin needed. Run `/ponytail full` to activate, `/ponytail-help` for the command list. Ported from [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) (MIT).
-
 ---
 
 ## Troubleshooting
 
-- **Hooks not running** — restart Claude Code (it reloads `settings.json` only on start). Verify scripts are executable: `chmod +x ~/.claude/monitoring/hooks/*.sh`.
+- **Hooks not running** — restart Claude Code (it reloads `settings.json` only on start).
 - **`settings.json` didn't change after re-install** — expected: the installer never overwrites an existing `settings.json`. Delete or rename your copy, then re-run, or hand-merge from this repo.
 - **Node hooks failing** — you installed `--full` without Node 18+. Either install Node or re-run with `./install.sh` (default omits Node hooks).
-- **Logs** — `~/.claude/logs/task-router.jsonl` · `~/.claude/logs/session-metrics.jsonl`.
+- **Skill descriptions being dropped** — run `/doctor` in Claude Code; if skills are shortened or dropped, you've added too many. Run `/context` to see startup overhead.
 
 ---
 
@@ -283,12 +282,11 @@ After installing this config, layer these official marketplaces on top — they'
 claude-code-config/
 ├── .claude-plugin/
 │   └── marketplace.json   # Plugin marketplace entry (Anthropic convention)
-├── agents/                # 30 specialized subagents
-├── commands/              # 63 slash commands
-├── skills/                # 64 workflow skills
-├── rules/                 # 66 coding rules (common + per-language)
-├── monitoring/hooks/      # 4 zero-dep lifecycle hooks (default)
-├── hooks/                 # Opt-in Node quality-gate hooks
+├── agents/                # 12 specialized subagents
+├── commands/              # 10 slash commands
+├── skills/                # 17 workflow skills
+├── rules/                 # Curated coding rules (common + python/swift/typescript)
+├── hooks/                 # Opt-in Node token-saving hooks
 ├── scripts/hooks/         # Scripts invoked by the opt-in hooks
 ├── security/              # Security framework docs
 ├── mcp-configs/           # Reference MCP server configs
@@ -296,7 +294,7 @@ claude-code-config/
 ├── images/                # README demo GIFs
 ├── docs/                  # Developer docs (PLUGIN_SCHEMA_NOTES.md, tapes/)
 ├── install.sh             # Zero-dep installer (--minimal / --full / --uninstall / --dry-run)
-├── settings.json          # Starter settings (permissions + 4 lifecycle hooks)
+├── settings.json          # Starter settings (permissions + token-saving hooks)
 ├── mcp.json               # MCP server config (add your tokens)
 ├── plugin.json            # Claude Code plugin manifest
 └── AGENTS.md              # Full agent reference
@@ -310,7 +308,6 @@ claude-code-config/
 - [superpowers](https://github.com/obra/superpowers) — Brainstorming, planning, TDD skills.
 - [claude-code-hooks-multi-agent-observability](https://github.com/disler/claude-code-hooks-multi-agent-observability) — Monitoring patterns.
 - [ruflo](https://github.com/ruvnet/ruflo) — Task-router and session-persistence patterns.
-- [ponytail](https://github.com/DietrichGebert/ponytail) — Lazy-senior-dev skill + commands (MIT), ported into `skills/` and `commands/`.
 
 ## License
 
